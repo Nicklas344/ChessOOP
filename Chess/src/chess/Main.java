@@ -23,14 +23,33 @@ import java.util.ListIterator;
 /**
  * This is the Main Class of our project.
  * All GUI Elements are declared, initialized and used in this class itself.
- * It is inherited from the JFrame Class of Java's Swing Library. 
- * 
+ * It is inherited from the JFrame Class of Java's Swing Library.
+ *
+
+Things to fix:
+
+When a pawn reaches the oppesite side it does not give the option to choose what I want it to be
+
+FIXED Not really working when moving peice to new cell, preventing checkmate.
+	There is different behavior between pawn, queen, bishop (and other) ??
+	When a piece is able to take or go in front of an enemy piece to prevent
+	chectmate it will also allow the player to move piece out of the way, even
+	though this is not allow, when enemy on next turn takes the king the game
+	gliches out.
+
+There is no computer to practice against
+
+The indanger method in king is not so smart written
+	Make the method shorter
+
+The constructer in Main is very long
+
  */
 
 public class Main extends JFrame implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	//Variable Declaration
 	private static final int Height=700;
 	private static final int Width=1110;
@@ -72,38 +91,38 @@ public class Main extends JFrame implements MouseListener
 	private Button start,wselect,bselect,WNewPlayer,BNewPlayer;
 	public static int timeRemaining=60;
 	public static void main(String[] args){
-	
-	//variable initialization
-	wr01=new Rook("WR01","White_Rook.png",0);
-	wr02=new Rook("WR02","White_Rook.png",0);
-	br01=new Rook("BR01","Black_Rook.png",1);
-	br02=new Rook("BR02","Black_Rook.png",1);
-	wk01=new Knight("WK01","White_Knight.png",0);
-	wk02=new Knight("WK02","White_Knight.png",0);
-	bk01=new Knight("BK01","Black_Knight.png",1);
-	bk02=new Knight("BK02","Black_Knight.png",1);
-	wb01=new Bishop("WB01","White_Bishop.png",0);
-	wb02=new Bishop("WB02","White_Bishop.png",0);
-	bb01=new Bishop("BB01","Black_Bishop.png",1);
-	bb02=new Bishop("BB02","Black_Bishop.png",1);
-	wq=new Queen("WQ","White_Queen.png",0);
-	bq=new Queen("BQ","Black_Queen.png",1);
-	wk=new King("WK","White_King.png",0,7,3);
-	bk=new King("BK","Black_King.png",1,0,3);
-	wp=new Pawn[8];
-	bp=new Pawn[8];
-	for(int i=0;i<8;i++)
-	{
-		wp[i]=new Pawn("WP0"+(i+1),"White_Pawn.png",0);
-		bp[i]=new Pawn("BP0"+(i+1),"Black_Pawn.png",1);
+
+		//variable initialization
+		wr01=new Rook("WR01","White_Rook.png",0);
+		wr02=new Rook("WR02","White_Rook.png",0);
+		br01=new Rook("BR01","Black_Rook.png",1);
+		br02=new Rook("BR02","Black_Rook.png",1);
+		wk01=new Knight("WK01","White_Knight.png",0);
+		wk02=new Knight("WK02","White_Knight.png",0);
+		bk01=new Knight("BK01","Black_Knight.png",1);
+		bk02=new Knight("BK02","Black_Knight.png",1);
+		wb01=new Bishop("WB01","White_Bishop.png",0);
+		wb02=new Bishop("WB02","White_Bishop.png",0);
+		bb01=new Bishop("BB01","Black_Bishop.png",1);
+		bb02=new Bishop("BB02","Black_Bishop.png",1);
+		wq=new Queen("WQ","White_Queen.png",0);
+		bq=new Queen("BQ","Black_Queen.png",1);
+		wk=new King("WK","White_King.png",0,7,3);
+		bk=new King("BK","Black_King.png",1,0,3);
+		wp=new Pawn[8];
+		bp=new Pawn[8];
+		for(int i=0;i<8;i++)
+		{
+			wp[i]=new Pawn("WP0"+(i+1),"White_Pawn.png",0);
+			bp[i]=new Pawn("BP0"+(i+1),"Black_Pawn.png",1);
+		}
+
+		//Setting up the board
+		Mainboard = new Main();
+		Mainboard.setVisible(true);
+		Mainboard.setResizable(false);
 	}
-	
-	//Setting up the board
-	Mainboard = new Main();
-	Mainboard.setVisible(true);	
-	Mainboard.setResizable(false);
-	}
-	
+
 	//Constructor
 	private Main()
     {
@@ -123,7 +142,7 @@ public class Main extends JFrame implements MouseListener
 		board.setMinimumSize(new Dimension(800,700));
 		ImageIcon img = new ImageIcon(this.getClass().getResource("icon.png"));
 		this.setIconImage(img.getImage());
-		
+
 		//Time Slider Details
 		timeSlider.setMinimum(1);
 		timeSlider.setMaximum(15);
@@ -132,21 +151,21 @@ public class Main extends JFrame implements MouseListener
 		timeSlider.setPaintLabels(true);
 		timeSlider.setPaintTicks(true);
 		timeSlider.addChangeListener(new TimeChange());
-		
-		
+
+
 		//Fetching Details of all Players
 		wplayer= Player.fetch_players();
 		Iterator<Player> witr=wplayer.iterator();
 		while(witr.hasNext())
 			Wnames.add(witr.next().name());
-				
+
 		bplayer= Player.fetch_players();
 		Iterator<Player> bitr=bplayer.iterator();
 		while(bitr.hasNext())
-			Bnames.add(bitr.next().name());
-	    WNames=Wnames.toArray(WNames);	
+			Bnames.add(bitr.next().name()); // A copy, it's the same array.
+    WNames=Wnames.toArray(WNames);
 		BNames=Bnames.toArray(BNames);
-		
+
 		Cell cell;
 		board.setBorder(BorderFactory.createLoweredBevelBorder());
 		pieces.Piece P;
@@ -156,19 +175,19 @@ public class Main extends JFrame implements MouseListener
 		content.setBackground(Color.black);
 		controlPanel=new JPanel();
 		content.setLayout(new BorderLayout());
-		controlPanel.setLayout(new GridLayout(3,3));
+		controlPanel.setLayout(new GridLayout(3, 3));
 		controlPanel.setBorder(BorderFactory.createTitledBorder(null, "Statistics", TitledBorder.TOP,TitledBorder.CENTER, new Font("Lucida Calligraphy",Font.PLAIN,20), Color.ORANGE));
-		
+
 		//Defining the Player Box in Control Panel
 		WhitePlayer=new JPanel();
-		WhitePlayer.setBorder(BorderFactory.createTitledBorder(null, "White Player", TitledBorder.TOP,TitledBorder.CENTER, new Font("times new roman",Font.BOLD,18), Color.RED));
+		WhitePlayer.setBorder(BorderFactory.createTitledBorder(null, "White Player", TitledBorder.TOP,TitledBorder.CENTER, new Font("times new roman",Font.BOLD,18), Color.BLACK));
 		WhitePlayer.setLayout(new BorderLayout());
-		
+
 		BlackPlayer=new JPanel();
-		BlackPlayer.setBorder(BorderFactory.createTitledBorder(null, "Black Player", TitledBorder.TOP,TitledBorder.CENTER, new Font("times new roman",Font.BOLD,18), Color.BLUE));
-	    BlackPlayer.setLayout(new BorderLayout());
-		
-	    JPanel whitestats=new JPanel(new GridLayout(3,3));
+		BlackPlayer.setBorder(BorderFactory.createTitledBorder(null, "Black Player", TitledBorder.TOP,TitledBorder.CENTER, new Font("Open sans",Font.BOLD,20), Color.BLACK));
+    BlackPlayer.setLayout(new BorderLayout());
+
+    JPanel whitestats=new JPanel(new GridLayout(3,3));
 		JPanel blackstats=new JPanel(new GridLayout(3,3));
 		wcombo=new JComboBox<String>(WNames);
 		bcombo=new JComboBox<String>(BNames);
@@ -202,13 +221,13 @@ public class Main extends JFrame implements MouseListener
 		BlackPlayer.add(blackstats,BorderLayout.WEST);
 		controlPanel.add(WhitePlayer);
 		controlPanel.add(BlackPlayer);
-		
-		
+
+
 		//Defining all the Cells
 		boardState=new Cell[8][8];
 		for(int i=0;i<8;i++)
 			for(int j=0;j<8;j++)
-			{	
+			{
 				P=null;
 				if(i==0&&j==0)
 					P=br01;
@@ -248,17 +267,18 @@ public class Main extends JFrame implements MouseListener
 					P=wp[j];
 				cell=new Cell(i,j,P);
 				cell.addMouseListener(this);
-				board.add(cell);
-				boardState[i][j]=cell;
+				board.add(cell); // Visuel board with JPanels.
+				boardState[i][j]=cell; // Cell objects we can refer to later.
 			}
-		showPlayer=new JPanel(new FlowLayout());  
+
+		showPlayer=new JPanel(new FlowLayout());
 		showPlayer.add(timeSlider);
-		JLabel setTime=new JLabel("Set Timer(in mins):"); 
+		JLabel setTime=new JLabel("Set Timer(in mins):");
 		start=new Button("Start");
 		start.setBackground(Color.black);
 		start.setForeground(Color.white);
-	    start.addActionListener(new START());
-		start.setPreferredSize(new Dimension(120,40));
+	  start.addActionListener(new START());
+		start.setPreferredSize(new Dimension(60,40));
 		setTime.setFont(new Font("Arial",Font.BOLD,16));
 		label = new JLabel("Time Starts now", JLabel.CENTER);
 		  label.setFont(new Font("SERIF", Font.BOLD, 30));
@@ -270,31 +290,32 @@ public class Main extends JFrame implements MouseListener
 	      time.add(displayTime);
 	      controlPanel.add(time);
 		board.setMinimumSize(new Dimension(800,700));
-		
+
 		//The Left Layout When Game is inactive
-		temp=new JPanel(){
+		temp=new JPanel() {
 			private static final long serialVersionUID = 1L;
-			     
+
 			@Override
-		    public void paintComponent(Graphics g) {
-				  try {
-			          image = ImageIO.read(this.getClass().getResource("clash.jpg"));
-			       } catch (IOException ex) {
-			            System.out.println("not found");
-			       }
-			   
+	    public void paintComponent(Graphics g) {
+			  try {
+          image = ImageIO.read(this.getClass().getResource("clash.jpg"));
+	      } catch (IOException ex) {
+	        System.out.println("not found");
+	      }
+
 				g.drawImage(image, 0, 0, null);
-			}         
-	    };
+			}
+    };
 
 		temp.setMinimumSize(new Dimension(800,700));
-		controlPanel.setMinimumSize(new Dimension(285,700));
+		controlPanel.setMinimumSize(new Dimension(285,900));
+
 		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,temp, controlPanel);
-		
-	    content.add(split);
+
+    content.add(split);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
-	
+	}
+
 	// A function to change the chance from White Player to Black Player or vice verse
 	// It is made public because it is to be accessed in the Time Class
 	public void changechance()
@@ -323,7 +344,7 @@ public class Main extends JFrame implements MouseListener
 			showPlayer.add(CHNC);
 		}
 	}
-	
+
 	//A function to retrieve the Black King or White King
 	private King getKing(int color)
 	{
@@ -332,7 +353,7 @@ public class Main extends JFrame implements MouseListener
 		else
 			return bk;
 	}
-	
+
 	//A function to clean the highlights of possible destination cells
     private void cleandestinations(ArrayList<Cell> destlist)      //Function to clear the last move's destinations
     {
@@ -340,7 +361,7 @@ public class Main extends JFrame implements MouseListener
     	while(it.hasNext())
     		it.next().removepossibledestination();
     }
-    
+
     //A function that indicates the possible moves by highlighting the Cells
     private void highlightdestinations(ArrayList<Cell> destlist)
     {
@@ -348,19 +369,19 @@ public class Main extends JFrame implements MouseListener
     	while(it.hasNext())
     		it.next().setpossibledestination();
     }
-    
-    
+
+
   //Function to check if the king will be in danger if the given move is made
-    private boolean willkingbeindanger(Cell fromcell,Cell tocell)
+    private boolean willkingbeindanger(Cell fromcell,Cell tocell) // Maybe this method is not always called?
     {
     	Cell newboardstate[][] = new Cell[8][8];
     	for(int i=0;i<8;i++)
     		for(int j=0;j<8;j++)
     		{	try { newboardstate[i][j] = new Cell(boardState[i][j]);} catch (CloneNotSupportedException e){e.printStackTrace(); System.out.println("There is a problem with cloning !!"); }}
-    	
+
     	if(newboardstate[tocell.x][tocell.y].getpiece()!=null)
 			newboardstate[tocell.x][tocell.y].removePiece();
-    	
+
 		newboardstate[tocell.x][tocell.y].setPiece(newboardstate[fromcell.x][fromcell.y].getpiece());
 		if(newboardstate[tocell.x][tocell.y].getpiece() instanceof King)
 		{
@@ -373,7 +394,7 @@ public class Main extends JFrame implements MouseListener
 		else
 			return false;
     }
-    
+
     //A function to eliminate the possible moves that will put the King in danger
     private ArrayList<Cell> filterdestination (ArrayList<Cell> destlist, Cell fromcell)
     {
@@ -386,7 +407,7 @@ public class Main extends JFrame implements MouseListener
     		for(int i=0;i<8;i++)
         		for(int j=0;j<8;j++)
         		{	try { newboardstate[i][j] = new Cell(boardState[i][j]);} catch (CloneNotSupportedException e){e.printStackTrace();}}
-    		
+
     		Cell tempc = it.next();
     		if(newboardstate[tempc.x][tempc.y].getpiece()!=null)
     			newboardstate[tempc.x][tempc.y].removePiece();
@@ -406,8 +427,8 @@ public class Main extends JFrame implements MouseListener
     	}
     	return newlist;
     }
-    
-    //A Function to filter the possible moves when the king of the current player is under Check 
+
+    //A Function to filter the possible moves when the king of the current player is under Check
     private ArrayList<Cell> incheckfilter (ArrayList<Cell> destlist, Cell fromcell, int color)
     {
     	ArrayList<Cell> newlist = new ArrayList<Cell>();
@@ -438,7 +459,7 @@ public class Main extends JFrame implements MouseListener
     	}
     	return newlist;
     }
-    
+
     //A function to check if the King is check-mate. The Game Ends if this function returns true.
     public boolean checkmate(int color)
     {
@@ -459,20 +480,21 @@ public class Main extends JFrame implements MouseListener
     	}
     	return true;
     }
-	
-    
-    @SuppressWarnings("deprecation")
+
+
+  @SuppressWarnings("deprecation")
 	private void gameend()
-    {
+  {
     	cleandestinations(destinationlist);
     	displayTime.disable();
     	timer.countdownTimer.stop();
     	if(previous!=null)
     		previous.removePiece();
     	if(chance==0)
-		{	White.updateGamesWon();
-			White.Update_Player();
-			winner=White.name();
+			{
+				White.updateGamesWon();
+				White.Update_Player();
+				winner=White.name();
 		}
 		else
 		{
@@ -484,13 +506,13 @@ public class Main extends JFrame implements MouseListener
 		WhitePlayer.remove(wdetails);
 		BlackPlayer.remove(bdetails);
 		displayTime.remove(label);
-		
+
 		displayTime.add(start);
 		showPlayer.remove(mov);
 		showPlayer.remove(CHNC);
 		showPlayer.revalidate();
 		showPlayer.add(timeSlider);
-		
+
 		split.remove(board);
 		split.add(temp);
 		WNewPlayer.enable();
@@ -503,8 +525,8 @@ public class Main extends JFrame implements MouseListener
 		Mainboard = new Main();
 		Mainboard.setVisible(true);
 		Mainboard.setResizable(false);
-    }
-    
+  }
+
     //These are the abstract function of the parent class. Only relevant method here is the On-Click Fuction
     //which is called when the user clicks on a particular cell
 	@Override
@@ -527,8 +549,13 @@ public class Main extends JFrame implements MouseListener
 				{
 					if(boardState[getKing(chance).getx()][getKing(chance).gety()].ischeck())
 						destinationlist = new ArrayList<Cell>(filterdestination(destinationlist,c));
-					else if(destinationlist.isEmpty()==false && willkingbeindanger(c,destinationlist.get(0)))
-						destinationlist.clear();
+					else if(destinationlist.isEmpty()==false) // I don't know about this. With Rook this is (x-1, y)
+						for (int i = destinationlist.size() - 1; i >= 0; i--) {
+							if (willkingbeindanger(c,destinationlist.get(i))) {
+								// Remove this possible move.
+								destinationlist.remove(i);
+							}
+						}
 				}
 				highlightdestinations(destinationlist);
 			}
@@ -611,7 +638,7 @@ public class Main extends JFrame implements MouseListener
 			((King)c.getpiece()).sety(c.y);
 		}
 	}
-    
+
     //Other Irrelevant abstract function. Only the Click Event is captured.
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
@@ -627,10 +654,10 @@ public class Main extends JFrame implements MouseListener
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 	}
-	
-	
+
+
 	class START implements ActionListener
 	{
 
@@ -638,7 +665,7 @@ public class Main extends JFrame implements MouseListener
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 		if(White==null||Black==null)
 			{JOptionPane.showMessageDialog(controlPanel, "Fill in the details");
 			return;}
@@ -667,7 +694,7 @@ public class Main extends JFrame implements MouseListener
 		timer.start();
 	}
 	}
-	
+
 	class TimeChange implements ChangeListener
 	{
 		@Override
@@ -676,12 +703,12 @@ public class Main extends JFrame implements MouseListener
 			timeRemaining=timeSlider.getValue()*60;
 		}
 	}
-	
-	
+
+
 	class SelectHandler implements ActionListener
 	{
 		private int color;
-		
+
 		SelectHandler(int i)
 		{
 			color=i;
@@ -700,27 +727,27 @@ public class Main extends JFrame implements MouseListener
 				if(opl.isEmpty())
 					return;
 				JPanel det=(color==0)?wdetails:bdetails;
-				JPanel PL=(color==0)?WhitePlayer:BlackPlayer; 
+				JPanel PL=(color==0)?WhitePlayer:BlackPlayer;
 				if(selected==true)
 					det.removeAll();
 				n=(String)jc.getSelectedItem();
 				Iterator<Player> it=pl.iterator();
 				Iterator<Player> oit=opl.iterator();
 				while(it.hasNext())
-				{	
+				{
 					Player p=it.next();
 					if(p.name().equals(n))
 						{tempPlayer=p;
 						break;}
 				}
 				while(oit.hasNext())
-				{	
+				{
 					Player p=oit.next();
 					if(p.name().equals(n))
 						{opl.remove(p);
 						break;}
 				}
-				
+
 				if(tempPlayer==null)
 					return;
 				if(color==0)
@@ -734,17 +761,17 @@ public class Main extends JFrame implements MouseListener
 				det.add(new JLabel(" "+tempPlayer.name()));
 				det.add(new JLabel(" "+tempPlayer.gamesplayed()));
 				det.add(new JLabel(" "+tempPlayer.gameswon()));
-				
+
 				PL.revalidate();
 				PL.repaint();
 				PL.add(det);
 				selected=true;
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 		class Handler implements ActionListener{
 			private int color;
 			Handler(int i)
@@ -760,17 +787,17 @@ public class Main extends JFrame implements MouseListener
 				Iterator<Player> it=N.iterator();
 				JPanel det=(color==0)?wdetails:bdetails;
 				n=JOptionPane.showInputDialog(j,"Enter your name");
-					
+
 					if(n!=null)
 					{
-					
+
 					while(it.hasNext())
 					{
 						if(it.next().name().equals(n))
 						{JOptionPane.showMessageDialog(j,"Player exists");
 						return;}
 					}
-			
+
 						if(n.length()!=0)
 						{Player tem=new Player(n);
 						tem.Update_Player();
@@ -792,5 +819,5 @@ public class Main extends JFrame implements MouseListener
 				j.add(det);
 				selected=true;
 			}
-			}	 
+			}
 }

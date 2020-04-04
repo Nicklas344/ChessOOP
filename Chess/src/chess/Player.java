@@ -21,12 +21,12 @@ import javax.swing.JOptionPane;
  *
  */
 public class Player implements Serializable{
-	
+
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private Integer gamesplayed;
 	private Integer gameswon;
-	
+
 	//Constructor
 	public Player(String name)
 	{
@@ -35,44 +35,44 @@ public class Player implements Serializable{
 		gamesplayed = new Integer(0);
 		gameswon = new Integer(0);
 	}
-	
+
 	//Name Getter
 	public String name()
 	{
 		return name;
 	}
-	
+
 	//Returns the number of games played
 	public Integer gamesplayed()
 	{
 		return gamesplayed;
 	}
-	
+
 	//Returns the number of games won
 	public Integer gameswon()
 	{
 		return gameswon;
 	}
-	
+
 	//Calculates the win percentage of the player
 	public Integer winpercent()
 	{
 		return new Integer((gameswon*100)/gamesplayed);
 	}
-	
+
 	//Increments the number of games played
 	public void updateGamesPlayed()
 	{
 		gamesplayed++;
 	}
-	
+
 	//Increments the number of games won
 	public void updateGamesWon()
 	{
 		gameswon++;
 	}
-	
-	
+
+
 	public static ArrayList<Player> fetch_players()         //Function to fetch the list of the players
 	{
 		Player tempplayer;
@@ -106,7 +106,7 @@ public class Player implements Serializable{
 			try {input.close();} catch (IOException e1) {}
 			JOptionPane.showMessageDialog(null, "Unable to read the required Game files !!");
 		}
-		catch (ClassNotFoundException e) 
+		catch (ClassNotFoundException e)
 		{
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Game Data File Corrupted !! Click Ok to Continue Builing New File");
@@ -116,7 +116,7 @@ public class Player implements Serializable{
 		}
 		return players;
 	}
-	
+
 	public void Update_Player()            //Function to update the statistics of a player
 	{
 		ObjectInputStream input = null;
@@ -132,43 +132,44 @@ public class Player implements Serializable{
 		{
 			JOptionPane.showMessageDialog(null, "Read-Write Permission Denied !! Program Cannot Start");
 			System.exit(0);
-		} 
+		}
 		boolean playerdonotexist;
 		try
 		{
-			if(outputfile.exists()==false)
+
+			if(outputfile.exists()==false) // Make sure tempfile output exists.
 				outputfile.createNewFile();
-			if(inputfile.exists()==false)
+			if(inputfile.exists()==false) // Write to temp if chessgamedata doesn't exist.
 			{
-					output = new ObjectOutputStream(new java.io.FileOutputStream(outputfile,true));
-					output.writeObject(this);
+				output = new ObjectOutputStream(new java.io.FileOutputStream(outputfile,true));
+				output.writeObject(this);
 			}
-			else
+			else // chessgamedata does exist.
 			{
 				input = new ObjectInputStream(new FileInputStream(inputfile));
 				output = new ObjectOutputStream(new FileOutputStream(outputfile));
 				playerdonotexist=true;
 				try
 				{
-				while(true)
-				{
-					temp_player = (Player)input.readObject();
-					if (temp_player.name().equals(name()))
+					while(true)
 					{
-						output.writeObject(this);
-						playerdonotexist = false;
+						temp_player = (Player) input.readObject(); // Has multiple objects?
+						if (temp_player.name().equals(name()))
+						{
+							output.writeObject(this);
+							playerdonotexist = false;
+						}
+						else
+							output.writeObject(temp_player); // Put it back.
 					}
-					else
-						output.writeObject(temp_player);
-				}
 				}
 				catch(EOFException e){
 					input.close();
 				}
 				if(playerdonotexist)
-					output.writeObject(this);
+					output.writeObject(this); // Append to end of file.
 			}
-			inputfile.delete();
+			inputfile.delete(); // Do a swich-a-ruu delete inputfile and rename temp outputfile.
 			output.close();
 			File newf = new File(System.getProperty("user.dir")+ File.separator + "chessgamedata.dat");
 			if(outputfile.renameTo(newf)==false)
@@ -183,14 +184,14 @@ public class Player implements Serializable{
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Unable to read/write the required Game files !! Press ok to continue");
 		}
-		catch (ClassNotFoundException e) 
+		catch (ClassNotFoundException e)
 		{
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Game Data File Corrupted !! Click Ok to Continue Builing New File");
 		}
 		catch (Exception e)
 		{
-			
+
 		}
 	}
 }
