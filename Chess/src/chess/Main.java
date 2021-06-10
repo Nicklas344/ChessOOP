@@ -166,7 +166,7 @@ public class Main extends JFrame implements MouseListener
 		Iterator<Player> bitr=bplayer.iterator();
 		while(bitr.hasNext())
 			Bnames.add(bitr.next().name()); // A copy, it's the same array.
-    WNames=Wnames.toArray(WNames);
+		WNames=Wnames.toArray(WNames);
 		BNames=Bnames.toArray(BNames);
 
 		Cell cell;
@@ -188,9 +188,9 @@ public class Main extends JFrame implements MouseListener
 
 		BlackPlayer=new JPanel();
 		BlackPlayer.setBorder(BorderFactory.createTitledBorder(null, "Black Player", TitledBorder.TOP,TitledBorder.CENTER, new Font("Open sans",Font.BOLD,20), Color.BLACK));
-    BlackPlayer.setLayout(new BorderLayout());
+		BlackPlayer.setLayout(new BorderLayout());
 
-    JPanel whitestats=new JPanel(new GridLayout(3,3));
+		JPanel whitestats=new JPanel(new GridLayout(3,3));
 		JPanel blackstats=new JPanel(new GridLayout(3,3));
 		wcombo=new JComboBox<String>(WNames);
 		bcombo=new JComboBox<String>(BNames);
@@ -229,6 +229,7 @@ public class Main extends JFrame implements MouseListener
 		//Defining all the Cells. Hvorfor egentlig bruge et loop her, er det ikke kortere bare direkte at eandre boardState. 
 		boardState=new Cell[8][8];
 		for(int i=0;i<8;i++)
+		{
 			for(int j=0;j<8;j++)
 			{
 				P=null;
@@ -273,6 +274,7 @@ public class Main extends JFrame implements MouseListener
 				board.add(cell); // Visuel board with JPanels.
 				boardState[i][j]=cell; // Cell objects we can refer to later.
 			}
+		}
 
 		showPlayer=new JPanel(new FlowLayout());
 		showPlayer.add(timeSlider);
@@ -280,18 +282,18 @@ public class Main extends JFrame implements MouseListener
 		start=new Button("Start");
 		start.setBackground(Color.black);
 		start.setForeground(Color.white);
-	  start.addActionListener(new START());
+		start.addActionListener(new START());
 		start.setPreferredSize(new Dimension(60,40));
 		setTime.setFont(new Font("Arial",Font.BOLD,16));
 		label = new JLabel("Time Starts now", JLabel.CENTER);
-		  label.setFont(new Font("SERIF", Font.BOLD, 30));
-	      displayTime=new JPanel(new FlowLayout());
-	      time=new JPanel(new GridLayout(3,3));
-	      time.add(setTime);
-	      time.add(showPlayer);
-	      displayTime.add(start);
-	      time.add(displayTime);
-	      controlPanel.add(time);
+		label.setFont(new Font("SERIF", Font.BOLD, 30));
+	    displayTime=new JPanel(new FlowLayout());
+	    time=new JPanel(new GridLayout(3,3));
+	    time.add(setTime);
+	    time.add(showPlayer);
+	    displayTime.add(start);
+	    time.add(displayTime);
+	    controlPanel.add(time);
 		board.setMinimumSize(new Dimension(800,700));
 
 		//The Left Layout When Game is inactive
@@ -299,23 +301,23 @@ public class Main extends JFrame implements MouseListener
 			private static final long serialVersionUID = 1L;
 
 			@Override
-	    public void paintComponent(Graphics g) {
-			  try {
-          image = ImageIO.read(this.getClass().getResource("clash.jpg"));
-	      } catch (IOException ex) {
-	        System.out.println("not found");
-	      }
+			public void paintComponent(Graphics g) {
+				try {
+					image = ImageIO.read(this.getClass().getResource("clash.jpg"));
+				} catch (IOException ex) {
+					System.out.println("not found");
+				}
 
 				g.drawImage(image, 0, 0, null);
 			}
-    };
+		};
 
 		temp.setMinimumSize(new Dimension(800,700));
 		controlPanel.setMinimumSize(new Dimension(285,900));
 
 		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,temp, controlPanel);
 
-    content.add(split);
+		content.add(split);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
@@ -486,7 +488,7 @@ public class Main extends JFrame implements MouseListener
 
 
   @SuppressWarnings("deprecation")
-	private void gameend()
+  private void gameend()
   {
     	cleandestinations(destinationlist);
     	displayTime.disable();
@@ -664,38 +666,38 @@ public class Main extends JFrame implements MouseListener
 	class START implements ActionListener
 	{
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
-		if(White==null||Black==null)
-			{JOptionPane.showMessageDialog(controlPanel, "Fill in the details");
-			return;}
-		White.updateGamesPlayed();
-		White.Update_Player();
-		Black.updateGamesPlayed();
-		Black.Update_Player();
-		WNewPlayer.disable();
-		BNewPlayer.disable();
-		wselect.disable();
-		bselect.disable();
-		split.remove(temp);
-		split.add(board);
-		showPlayer.remove(timeSlider);
-		mov=new JLabel("Move:");
-		mov.setFont(new Font("Comic Sans MS",Font.PLAIN,20));
-		mov.setForeground(Color.red);
-		showPlayer.add(mov);
-		CHNC=new JLabel(move);
-		CHNC.setFont(new Font("Comic Sans MS",Font.BOLD,20));
-		CHNC.setForeground(Color.blue);
-		showPlayer.add(CHNC);
-		displayTime.remove(start);
-		displayTime.add(label);
-		timer=new Time(label);
-		timer.start();
-	}
+		@SuppressWarnings("deprecation")
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+	
+			if(White==null||Black==null)
+				{JOptionPane.showMessageDialog(controlPanel, "Fill in the details");
+				return;}
+			White.updateGamesPlayed();
+			White.Update_Player();
+			Black.updateGamesPlayed();
+			Black.Update_Player();
+			WNewPlayer.disable();
+			BNewPlayer.disable();
+			wselect.disable();
+			bselect.disable();
+			split.remove(temp);
+			split.add(board);
+			showPlayer.remove(timeSlider);
+			mov=new JLabel("Move:");
+			mov.setFont(new Font("Comic Sans MS",Font.PLAIN,20));
+			mov.setForeground(Color.red);
+			showPlayer.add(mov);
+			CHNC=new JLabel(move);
+			CHNC.setFont(new Font("Comic Sans MS",Font.BOLD,20));
+			CHNC.setForeground(Color.blue);
+			showPlayer.add(CHNC);
+			displayTime.remove(start);
+			displayTime.add(label);
+			timer=new Time(label);
+			timer.start();
+		}
 	}
 
 	class TimeChange implements ChangeListener
@@ -711,116 +713,113 @@ public class Main extends JFrame implements MouseListener
 	class SelectHandler implements ActionListener
 	{
 		private int color;
-
 		SelectHandler(int i)
 		{
 			color=i;
 		}
-			@Override
-			public void actionPerformed(ActionEvent arg0)
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			// TODO Auto-generated method stub
+			tempPlayer=null;
+			String n=(color==0)?wname:bname;
+			JComboBox<String> jc=(color==0)?wcombo:bcombo;
+			JComboBox<String> ojc=(color==0)?bcombo:wcombo;
+			ArrayList<Player> pl=(color==0)?wplayer:bplayer;
+			//ArrayList<Player> otherPlayer=(color==0)?bplayer:wplayer;
+			ArrayList<Player> opl=Player.fetch_players();
+			if(opl.isEmpty())
+				return;
+			JPanel det=(color==0)?wdetails:bdetails;
+			JPanel PL=(color==0)?WhitePlayer:BlackPlayer;
+			if(selected==true)
+				det.removeAll();
+			n=(String)jc.getSelectedItem();
+			Iterator<Player> it=pl.iterator();
+			Iterator<Player> oit=opl.iterator();
+			while(it.hasNext())
 			{
-				// TODO Auto-generated method stub
-				tempPlayer=null;
-				String n=(color==0)?wname:bname;
-				JComboBox<String> jc=(color==0)?wcombo:bcombo;
-				JComboBox<String> ojc=(color==0)?bcombo:wcombo;
-				ArrayList<Player> pl=(color==0)?wplayer:bplayer;
-				//ArrayList<Player> otherPlayer=(color==0)?bplayer:wplayer;
-				ArrayList<Player> opl=Player.fetch_players();
-				if(opl.isEmpty())
-					return;
-				JPanel det=(color==0)?wdetails:bdetails;
-				JPanel PL=(color==0)?WhitePlayer:BlackPlayer;
-				if(selected==true)
-					det.removeAll();
-				n=(String)jc.getSelectedItem();
-				Iterator<Player> it=pl.iterator();
-				Iterator<Player> oit=opl.iterator();
+				Player p=it.next();
+				if(p.name().equals(n))
+					{tempPlayer=p;
+					break;}
+			}
+			while(oit.hasNext())
+			{
+				Player p=oit.next();
+				if(p.name().equals(n))
+					{opl.remove(p);
+					break;}
+			}
+
+			if(tempPlayer==null)
+				return;
+			if(color==0)
+				White=tempPlayer;
+			else
+				Black=tempPlayer;
+			bplayer=opl;
+			ojc.removeAllItems();
+			for (Player s:opl)
+				ojc.addItem(s.name());
+			det.add(new JLabel(" "+tempPlayer.name()));
+			det.add(new JLabel(" "+tempPlayer.gamesplayed()));
+			det.add(new JLabel(" "+tempPlayer.gameswon()));
+
+			PL.revalidate();
+			PL.repaint();
+			PL.add(det);
+			selected=true;
+		}
+	}
+
+
+	class Handler implements ActionListener{
+		private int color;
+		Handler(int i)
+		{
+			color=i;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			String n=(color==0)?wname:bname;
+			JPanel j=(color==0)?WhitePlayer:BlackPlayer;
+			ArrayList<Player> N=Player.fetch_players();
+			Iterator<Player> it=N.iterator();
+			JPanel det=(color==0)?wdetails:bdetails;
+			n=JOptionPane.showInputDialog(j,"Enter your name");
+
+				if(n!=null)
+				{
+
 				while(it.hasNext())
 				{
-					Player p=it.next();
-					if(p.name().equals(n))
-						{tempPlayer=p;
-						break;}
-				}
-				while(oit.hasNext())
-				{
-					Player p=oit.next();
-					if(p.name().equals(n))
-						{opl.remove(p);
-						break;}
+					if(it.next().name().equals(n))
+					{JOptionPane.showMessageDialog(j,"Player exists");
+					return;}
 				}
 
-				if(tempPlayer==null)
-					return;
-				if(color==0)
-					White=tempPlayer;
-				else
-					Black=tempPlayer;
-				bplayer=opl;
-				ojc.removeAllItems();
-				for (Player s:opl)
-					ojc.addItem(s.name());
-				det.add(new JLabel(" "+tempPlayer.name()));
-				det.add(new JLabel(" "+tempPlayer.gamesplayed()));
-				det.add(new JLabel(" "+tempPlayer.gameswon()));
-
-				PL.revalidate();
-				PL.repaint();
-				PL.add(det);
-				selected=true;
-			}
-
+					if(n.length()!=0)
+					{Player tem=new Player(n);
+					tem.Update_Player();
+					if(color==0)
+						White=tem;
+					else
+						Black=tem;
+					}
+					else return;
+				}
+			else
+				return;
+			det.removeAll();
+			det.add(new JLabel(" "+n));
+			det.add(new JLabel(" 0"));
+			det.add(new JLabel(" 0"));
+			j.revalidate();
+			j.repaint();
+			j.add(det);
+			selected=true;
 		}
-
-
-
-		class Handler implements ActionListener{
-			private int color;
-			Handler(int i)
-			{
-				color=i;
-			}
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				String n=(color==0)?wname:bname;
-				JPanel j=(color==0)?WhitePlayer:BlackPlayer;
-				ArrayList<Player> N=Player.fetch_players();
-				Iterator<Player> it=N.iterator();
-				JPanel det=(color==0)?wdetails:bdetails;
-				n=JOptionPane.showInputDialog(j,"Enter your name");
-
-					if(n!=null)
-					{
-
-					while(it.hasNext())
-					{
-						if(it.next().name().equals(n))
-						{JOptionPane.showMessageDialog(j,"Player exists");
-						return;}
-					}
-
-						if(n.length()!=0)
-						{Player tem=new Player(n);
-						tem.Update_Player();
-						if(color==0)
-							White=tem;
-						else
-							Black=tem;
-						}
-						else return;
-					}
-				else
-					return;
-				det.removeAll();
-				det.add(new JLabel(" "+n));
-				det.add(new JLabel(" 0"));
-				det.add(new JLabel(" 0"));
-				j.revalidate();
-				j.repaint();
-				j.add(det);
-				selected=true;
-			}
-			}
+	}
 }
