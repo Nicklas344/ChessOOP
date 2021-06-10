@@ -151,6 +151,9 @@ public class Player implements Serializable{
 				playerdonotexist=true;
 				try
 				{
+					// not so happy about this part. Why not update them all at once, that makes more 
+					// sense to me. We are creating input-, output object streams for each player object.
+					// Onless you are only updating one of them, then I guess it makes enough sense. 
 					while(true)
 					{
 						temp_player = (Player) input.readObject(); // Has multiple objects?

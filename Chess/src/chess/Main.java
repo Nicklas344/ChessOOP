@@ -159,6 +159,9 @@ public class Main extends JFrame implements MouseListener
 		while(witr.hasNext())
 			Wnames.add(witr.next().name());
 
+		// ja se, her vil det veare smartere hvis dataen bare var paa en form som vi kunne bruge direkte. 
+		// ArrayList names, wins, losses
+		// names.toArray()
 		bplayer= Player.fetch_players();
 		Iterator<Player> bitr=bplayer.iterator();
 		while(bitr.hasNext())
@@ -223,7 +226,7 @@ public class Main extends JFrame implements MouseListener
 		controlPanel.add(BlackPlayer);
 
 
-		//Defining all the Cells
+		//Defining all the Cells. Hvorfor egentlig bruge et loop her, er det ikke kortere bare direkte at eandre boardState. 
 		boardState=new Cell[8][8];
 		for(int i=0;i<8;i++)
 			for(int j=0;j<8;j++)
@@ -262,7 +265,7 @@ public class Main extends JFrame implements MouseListener
 				else if(i==7&&j==4)
 					P=wq;
 				else if(i==1)
-				P=bp[j];
+					P=bp[j];
 				else if(i==6)
 					P=wp[j];
 				cell=new Cell(i,j,P);
