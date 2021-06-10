@@ -42,7 +42,7 @@ There is no computer to practice against
 The indanger method in king is not so smart written
 	Make the method shorter
 
-The constructer in Main is very long
+The constructer in Main is very long. And messy.
 
  */
 
