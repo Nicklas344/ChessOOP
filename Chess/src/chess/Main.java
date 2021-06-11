@@ -323,7 +323,7 @@ public class Main extends JFrame implements MouseListener
 
 	// A function to change the chance from White Player to Black Player or vice verse
 	// It is made public because it is to be accessed in the Time Class
-	public void changechance()
+	public void changechance() // changeturn
 	{
 		if (boardState[getKing(chance).getx()][getKing(chance).gety()].ischeck())
 		{
@@ -379,21 +379,24 @@ public class Main extends JFrame implements MouseListener
   //Function to check if the king will be in danger if the given move is made
     private boolean willkingbeindanger(Cell fromcell,Cell tocell) // Maybe this method is not always called?
     {
+    	// block to perform move on copy newboardstate. 
     	Cell newboardstate[][] = new Cell[8][8];
     	for(int i=0;i<8;i++)
     		for(int j=0;j<8;j++)
     		{	try { newboardstate[i][j] = new Cell(boardState[i][j]);} catch (CloneNotSupportedException e){e.printStackTrace(); System.out.println("There is a problem with cloning !!"); }}
 
     	if(newboardstate[tocell.x][tocell.y].getpiece()!=null)
-			newboardstate[tocell.x][tocell.y].removePiece();
-
+			newboardstate[tocell.x][tocell.y].removePiece(); 
 		newboardstate[tocell.x][tocell.y].setPiece(newboardstate[fromcell.x][fromcell.y].getpiece());
 		if(newboardstate[tocell.x][tocell.y].getpiece() instanceof King)
 		{
+			// more complexity. 
 			((King)(newboardstate[tocell.x][tocell.y].getpiece())).setx(tocell.x);
 			((King)(newboardstate[tocell.x][tocell.y].getpiece())).sety(tocell.y);
 		}
 		newboardstate[fromcell.x][fromcell.y].removePiece();
+		
+		
 		if (((King)(newboardstate[getKing(chance).getx()][getKing(chance).gety()].getpiece())).isindanger(newboardstate)==true)
 			return true;
 		else
@@ -409,6 +412,7 @@ public class Main extends JFrame implements MouseListener
     	int x,y;
     	while (it.hasNext())
     	{
+    		// block of code to create a copy and perform this move on newboardstate.
     		for(int i=0;i<8;i++)
         		for(int j=0;j<8;j++)
         		{	try { newboardstate[i][j] = new Cell(boardState[i][j]);} catch (CloneNotSupportedException e){e.printStackTrace();}}
@@ -427,6 +431,8 @@ public class Main extends JFrame implements MouseListener
     			y=tempc.y;
     		}
     		newboardstate[fromcell.x][fromcell.y].removePiece();
+    		
+    		// if not in danger, add this move to the list. 
     		if ((((King)(newboardstate[x][y].getpiece())).isindanger(newboardstate)==false))
     			newlist.add(tempc);
     	}
@@ -442,6 +448,7 @@ public class Main extends JFrame implements MouseListener
     	int x,y;
     	while (it.hasNext())
     	{
+    		// Again, a block for getting a copy for a board, where a specific move is performed. 
     		for(int i=0;i<8;i++)
         		for(int j=0;j<8;j++)
         		{	try { newboardstate[i][j] = new Cell(boardState[i][j]);} catch (CloneNotSupportedException e){e.printStackTrace();}}
@@ -459,6 +466,7 @@ public class Main extends JFrame implements MouseListener
     			y=tempc.y;
     		}
     		newboardstate[fromcell.x][fromcell.y].removePiece();
+    		
     		if ((((King)(newboardstate[x][y].getpiece())).isindanger(newboardstate)==false))
     			newlist.add(tempc);
     	}

@@ -19,49 +19,30 @@ public class Pawn extends Piece{
 	}
 	
 	//Move Function Overridden
-	public ArrayList<Cell> move(Cell state[][],int x,int y)
-	{
+	public ArrayList<Cell> move(Cell state[][],int x,int y) {
 		//Pawn can move only one step except the first chance when it may move 2 steps
 		//It can move in a diagonal fashion only for attacking a piece of opposite color
 		//It cannot move backward or move forward to attact a piece
-		
 		possiblemoves.clear();
-		if(getcolor()==0)
-		{
-			if(x==0)
-				return possiblemoves;
-			if(state[x-1][y].getpiece()==null)
-			{
-				possiblemoves.add(state[x-1][y]);
-				if(x==6)
-				{
-					if(state[4][y].getpiece()==null)
-						possiblemoves.add(state[4][y]);
-				}
-			}
-			if((y>0)&&(state[x-1][y-1].getpiece()!=null)&&(state[x-1][y-1].getpiece().getcolor()!=this.getcolor()))
-				possiblemoves.add(state[x-1][y-1]);
-			if((y<7)&&(state[x-1][y+1].getpiece()!=null)&&(state[x-1][y+1].getpiece().getcolor()!=this.getcolor()))
-				possiblemoves.add(state[x-1][y+1]);
+
+		int dx = (getcolor()==0) ? -1 : 1;
+		if (x == (7 + 7*dx)/2) {
+			return possiblemoves;
 		}
-		else
-		{
-			if(x==8)
-				return possiblemoves;
-			if(state[x+1][y].getpiece()==null)
-			{
-				possiblemoves.add(state[x+1][y]);
-				if(x==1)
-				{
-					if(state[3][y].getpiece()==null)
-						possiblemoves.add(state[3][y]);
-				}
+		
+		if (state[x+dx][y].getpiece()==null) {
+			possiblemoves.add(state[x+dx][y]);
+			if(x == (5 - 5*dx)/2 + 1) {
+				if(state[(1 - dx)/2 + 3][y].getpiece()==null)
+					possiblemoves.add(state[(1 - dx)/2 + 3][y]);
 			}
-			if((y>0)&&(state[x+1][y-1].getpiece()!=null)&&(state[x+1][y-1].getpiece().getcolor()!=this.getcolor()))
-				possiblemoves.add(state[x+1][y-1]);
-			if((y<7)&&(state[x+1][y+1].getpiece()!=null)&&(state[x+1][y+1].getpiece().getcolor()!=this.getcolor()))
-				possiblemoves.add(state[x+1][y+1]);
 		}
+		
+		if ((y>0)&&(state[x+dx][y-1].getpiece()!=null)&&(state[x+dx][y-1].getpiece().getcolor()!=this.getcolor()))
+			possiblemoves.add(state[x+dx][y-1]);
+		if ((y<7)&&(state[x+dx][y+1].getpiece()!=null)&&(state[x+dx][y+1].getpiece().getcolor()!=this.getcolor()))
+			possiblemoves.add(state[x+dx][y+1]);
+		
 		return possiblemoves;
 	}
 }
