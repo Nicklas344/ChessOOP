@@ -59,11 +59,21 @@ public class Main extends JFrame implements MouseListener
 	private static Pawn wp[],bp[];
 	private static Queen wq,bq;
 	private static King wk,bk;
+	private ArrayList<Player> wplayer,bplayer;
+	private ArrayList<String> Wnames=new ArrayList<String>();
+	private ArrayList<String> Bnames=new ArrayList<String>();
+	private String wname=null,bname=null,winner=null;
+	static String move;
+	private Player tempPlayer;
+	private Player White=null,Black=null;
+	private Time timer;
+	public static Main mainboard;
+	public static int timeRemaining=60;
+	private boolean selected=false,end=false;
 	private Cell c,previous;
 	private int chance=0;
 	private Cell boardState[][];
 	private ArrayList<Cell> destinationlist = new ArrayList<Cell>();
-	private Player White=null,Black=null;
 	private JPanel board=new JPanel(new GridLayout(8,8));
 	private JPanel wdetails=new JPanel(new GridLayout(3,3));
 	private JPanel bdetails=new JPanel(new GridLayout(3,3));
@@ -73,23 +83,15 @@ public class Main extends JFrame implements MouseListener
 	private JSplitPane split;
 	private JLabel label,mov;
 	private static JLabel CHNC;
-	private Time timer;
-	public static Main Mainboard;
-	private boolean selected=false,end=false;
 	private Container content;
-	private ArrayList<Player> wplayer,bplayer;
-	private ArrayList<String> Wnames=new ArrayList<String>();
-	private ArrayList<String> Bnames=new ArrayList<String>();
 	private JComboBox<String> wcombo,bcombo;
-	private String wname=null,bname=null,winner=null;
-	static String move;
-	private Player tempPlayer;
 	private JScrollPane wscroll,bscroll;
 	private String[] WNames={},BNames={};
 	private JSlider timeSlider;
 	private BufferedImage image;
 	private Button start,wselect,bselect,WNewPlayer,BNewPlayer;
-	public static int timeRemaining=60;
+	
+	
 	public static void main(String[] args){
 
 		//variable initialization
@@ -107,8 +109,8 @@ public class Main extends JFrame implements MouseListener
 		bb02=new Bishop("BB02","Black_Bishop.png",1);
 		wq=new Queen("WQ","White_Queen.png",0);
 		bq=new Queen("BQ","Black_Queen.png",1);
-		wk=new King("WK","White_King.png",0,7,3);
-		bk=new King("BK","Black_King.png",1,0,3);
+		wk=new King("WK","White_King.png",0,7,4);
+		bk=new King("BK","Black_King.png",1,0,4);
 		wp=new Pawn[8];
 		bp=new Pawn[8];
 		for(int i=0;i<8;i++)
@@ -118,9 +120,9 @@ public class Main extends JFrame implements MouseListener
 		}
 
 		//Setting up the board
-		Mainboard = new Main();
-		Mainboard.setVisible(true);
-		Mainboard.setResizable(false);
+		mainboard = new Main();
+		mainboard.setVisible(true);
+		mainboard.setResizable(false);
 	}
 
 	//Constructor
@@ -132,33 +134,15 @@ public class Main extends JFrame implements MouseListener
 		wname=null;
 		bname=null;
 		winner=null;
-		board=new JPanel(new GridLayout(8,8));
-		wdetails=new JPanel(new GridLayout(3,3));
-		bdetails=new JPanel(new GridLayout(3,3));
-		bcombopanel=new JPanel();
-		wcombopanel=new JPanel();
 		Wnames=new ArrayList<String>();
 		Bnames=new ArrayList<String>();
-		board.setMinimumSize(new Dimension(800,700));
-		ImageIcon img = new ImageIcon(this.getClass().getResource("icon.png"));
-		this.setIconImage(img.getImage());
-
-		//Time Slider Details
-		timeSlider.setMinimum(1);
-		timeSlider.setMaximum(15);
-		timeSlider.setValue(1);
-		timeSlider.setMajorTickSpacing(2);
-		timeSlider.setPaintLabels(true);
-		timeSlider.setPaintTicks(true);
-		timeSlider.addChangeListener(new TimeChange());
-
-
+		
 		//Fetching Details of all Players
 		wplayer= Player.fetch_players();
 		Iterator<Player> witr=wplayer.iterator();
 		while(witr.hasNext())
 			Wnames.add(witr.next().name());
-
+		
 		// ja se, her vil det veare smartere hvis dataen bare var paa en form som vi kunne bruge direkte. 
 		// ArrayList names, wins, losses
 		// names.toArray()
@@ -168,10 +152,51 @@ public class Main extends JFrame implements MouseListener
 			Bnames.add(bitr.next().name()); // A copy, it's the same array.
 		WNames=Wnames.toArray(WNames);
 		BNames=Bnames.toArray(BNames);
+		
+		
+		board=new JPanel(new GridLayout(8,8));
+		wdetails=new JPanel(new GridLayout(3,3));
+		bdetails=new JPanel(new GridLayout(3,3));
+		bcombopanel=new JPanel();
+		wcombopanel=new JPanel();
+		board.setMinimumSize(new Dimension(800,700));
+		ImageIcon img = new ImageIcon(this.getClass().getResource("icon.png"));
+		this.setIconImage(img.getImage());
 
+		//Defining all the Cells. Hvorfor egentlig bruge et loop her, er det ikke kortere bare direkte at eandre boardState. 
 		Cell cell;
-		board.setBorder(BorderFactory.createLoweredBevelBorder());
 		pieces.Piece P;
+		boardState=new Cell[8][8];
+		Piece[] blackPieces = {br01, bk01, bb01, bq, bk, bb02, bk02, br02};
+		Piece[] whitePieces = {wr01, wk01, wb01, wq, wk, wb02, wk02, wr02};
+		for(int i=0;i<8;i++) {
+			for(int j=0;j<8;j++) {
+				P=null;
+				if(i==0)
+					P=blackPieces[j];
+				else if(i==7)
+					P=whitePieces[j];
+				else if(i==1)
+					P=bp[j];
+				else if(i==6)
+					P=wp[j];
+				cell=new Cell(i,j,P);
+				cell.addMouseListener(this);
+				board.add(cell); // Visuel board with JPanels.
+				boardState[i][j]=cell; // Cell objects we can refer to later.
+			}
+		}
+		
+		//Time Slider Details
+		timeSlider.setMinimum(1);
+		timeSlider.setMaximum(15);
+		timeSlider.setValue(1);
+		timeSlider.setMajorTickSpacing(2);
+		timeSlider.setPaintLabels(true);
+		timeSlider.setPaintTicks(true);
+		timeSlider.addChangeListener(new TimeChange());
+		
+		board.setBorder(BorderFactory.createLoweredBevelBorder());
 		content=getContentPane();
 		setSize(Width,Height);
 		setTitle("Chess");
@@ -224,57 +249,6 @@ public class Main extends JFrame implements MouseListener
 		BlackPlayer.add(blackstats,BorderLayout.WEST);
 		controlPanel.add(WhitePlayer);
 		controlPanel.add(BlackPlayer);
-
-
-		//Defining all the Cells. Hvorfor egentlig bruge et loop her, er det ikke kortere bare direkte at eandre boardState. 
-		boardState=new Cell[8][8];
-		for(int i=0;i<8;i++)
-		{
-			for(int j=0;j<8;j++)
-			{
-				P=null;
-				if(i==0&&j==0)
-					P=br01;
-				else if(i==0&&j==7)
-					P=br02;
-				else if(i==7&&j==0)
-					P=wr01;
-				else if(i==7&&j==7)
-					P=wr02;
-				else if(i==0&&j==1)
-					P=bk01;
-				else if (i==0&&j==6)
-					P=bk02;
-				else if(i==7&&j==1)
-					P=wk01;
-				else if (i==7&&j==6)
-					P=wk02;
-				else if(i==0&&j==2)
-					P=bb01;
-				else if (i==0&&j==5)
-					P=bb02;
-				else if(i==7&&j==2)
-					P=wb01;
-				else if(i==7&&j==5)
-					P=wb02;
-				else if(i==0&&j==3)
-					P=bk;
-				else if(i==0&&j==4)
-					P=bq;
-				else if(i==7&&j==3)
-					P=wk;
-				else if(i==7&&j==4)
-					P=wq;
-				else if(i==1)
-					P=bp[j];
-				else if(i==6)
-					P=wp[j];
-				cell=new Cell(i,j,P);
-				cell.addMouseListener(this);
-				board.add(cell); // Visuel board with JPanels.
-				boardState[i][j]=cell; // Cell objects we can refer to later.
-			}
-		}
 
 		showPlayer=new JPanel(new FlowLayout());
 		showPlayer.add(timeSlider);
@@ -395,7 +369,6 @@ public class Main extends JFrame implements MouseListener
 			((King)(newboardstate[tocell.x][tocell.y].getpiece())).sety(tocell.y);
 		}
 		newboardstate[fromcell.x][fromcell.y].removePiece();
-		
 		
 		if (((King)(newboardstate[getKing(chance).getx()][getKing(chance).gety()].getpiece())).isindanger(newboardstate)==true)
 			return true;
@@ -533,11 +506,11 @@ public class Main extends JFrame implements MouseListener
 		wselect.enable();
 		bselect.enable();
 		end=true;
-		Mainboard.disable();
-		Mainboard.dispose();
-		Mainboard = new Main();
-		Mainboard.setVisible(true);
-		Mainboard.setResizable(false);
+		mainboard.disable();
+		mainboard.dispose();
+		mainboard = new Main();
+		mainboard.setVisible(true);
+		mainboard.setResizable(false);
   }
 
     //These are the abstract function of the parent class. Only relevant method here is the On-Click Fuction
