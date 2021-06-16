@@ -53,15 +53,8 @@ public class Main extends JFrame implements MouseListener
 	//Variable Declaration
 	private static final int Height=700;
 	private static final int Width=1110;
-	private static Rook wr01,wr02,br01,br02;
-	private static Knight wk01,wk02,bk01,bk02;
-	private static Bishop wb01,wb02,bb01,bb02;
-	private static Pawn wp[],bp[];
-	private static Queen wq,bq;
-	private static King wk,bk;
+	private King wk,bk;
 	private ArrayList<Player> wplayer,bplayer;
-	private ArrayList<String> Wnames=new ArrayList<String>();
-	private ArrayList<String> Bnames=new ArrayList<String>();
 	private String wname=null,bname=null,winner=null;
 	static String move;
 	private Player tempPlayer;
@@ -86,39 +79,12 @@ public class Main extends JFrame implements MouseListener
 	private Container content;
 	private JComboBox<String> wcombo,bcombo;
 	private JScrollPane wscroll,bscroll;
-	private String[] WNames={},BNames={};
 	private JSlider timeSlider;
 	private BufferedImage image;
 	private Button start,wselect,bselect,WNewPlayer,BNewPlayer;
 	
 	
 	public static void main(String[] args){
-
-		//variable initialization
-		wr01=new Rook("WR01","White_Rook.png",0);
-		wr02=new Rook("WR02","White_Rook.png",0);
-		br01=new Rook("BR01","Black_Rook.png",1);
-		br02=new Rook("BR02","Black_Rook.png",1);
-		wk01=new Knight("WK01","White_Knight.png",0);
-		wk02=new Knight("WK02","White_Knight.png",0);
-		bk01=new Knight("BK01","Black_Knight.png",1);
-		bk02=new Knight("BK02","Black_Knight.png",1);
-		wb01=new Bishop("WB01","White_Bishop.png",0);
-		wb02=new Bishop("WB02","White_Bishop.png",0);
-		bb01=new Bishop("BB01","Black_Bishop.png",1);
-		bb02=new Bishop("BB02","Black_Bishop.png",1);
-		wq=new Queen("WQ","White_Queen.png",0);
-		bq=new Queen("BQ","Black_Queen.png",1);
-		wk=new King("WK","White_King.png",0,7,4);
-		bk=new King("BK","Black_King.png",1,0,4);
-		wp=new Pawn[8];
-		bp=new Pawn[8];
-		for(int i=0;i<8;i++)
-		{
-			wp[i]=new Pawn("WP0"+(i+1),"White_Pawn.png",0);
-			bp[i]=new Pawn("BP0"+(i+1),"Black_Pawn.png",1);
-		}
-
 		//Setting up the board
 		mainboard = new Main();
 		mainboard.setVisible(true);
@@ -134,8 +100,8 @@ public class Main extends JFrame implements MouseListener
 		wname=null;
 		bname=null;
 		winner=null;
-		Wnames=new ArrayList<String>();
-		Bnames=new ArrayList<String>();
+		ArrayList<String> Wnames=new ArrayList<String>();
+		ArrayList<String> Bnames=new ArrayList<String>();
 		
 		//Fetching Details of all Players
 		wplayer= Player.fetch_players();
@@ -150,6 +116,7 @@ public class Main extends JFrame implements MouseListener
 		Iterator<Player> bitr=bplayer.iterator();
 		while(bitr.hasNext())
 			Bnames.add(bitr.next().name()); // A copy, it's the same array.
+		String[] WNames = {}, BNames = {};
 		WNames=Wnames.toArray(WNames);
 		BNames=Bnames.toArray(BNames);
 		
@@ -163,6 +130,31 @@ public class Main extends JFrame implements MouseListener
 		ImageIcon img = new ImageIcon(this.getClass().getResource("icon.png"));
 		this.setIconImage(img.getImage());
 
+		//variable initialization
+		Rook wr01=new Rook("WR01","White_Rook.png",0);
+		Rook wr02=new Rook("WR02","White_Rook.png",0);
+		Rook br01=new Rook("BR01","Black_Rook.png",1);
+		Rook br02=new Rook("BR02","Black_Rook.png",1);
+		Knight wk01=new Knight("WK01","White_Knight.png",0);
+		Knight wk02=new Knight("WK02","White_Knight.png",0);
+		Knight bk01=new Knight("BK01","Black_Knight.png",1);
+		Knight bk02=new Knight("BK02","Black_Knight.png",1);
+		Bishop wb01=new Bishop("WB01","White_Bishop.png",0);
+		Bishop wb02=new Bishop("WB02","White_Bishop.png",0);
+		Bishop bb01=new Bishop("BB01","Black_Bishop.png",1);
+		Bishop bb02=new Bishop("BB02","Black_Bishop.png",1);
+		Queen wq=new Queen("WQ","White_Queen.png",0);
+		Queen bq=new Queen("BQ","Black_Queen.png",1);
+		wk=new King("WK","White_King.png",0,7,4);
+		bk=new King("BK","Black_King.png",1,0,4);
+		Pawn[] wp=new Pawn[8];
+		Pawn[] bp=new Pawn[8];
+		for(int i=0;i<8;i++)
+		{
+			wp[i]=new Pawn("WP0"+(i+1),"White_Pawn.png",0);
+			bp[i]=new Pawn("BP0"+(i+1),"Black_Pawn.png",1);
+		}
+		
 		//Defining all the Cells. Hvorfor egentlig bruge et loop her, er det ikke kortere bare direkte at eandre boardState. 
 		Cell cell;
 		pieces.Piece P;
