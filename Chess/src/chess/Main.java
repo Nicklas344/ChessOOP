@@ -466,25 +466,7 @@ public class Main extends JFrame implements MouseListener
 			{
 				if(c.getpiece().getcolor()!=chance)
 					return;
-				c.select();
-				previous=c;
-				destinationlist.clear();
-				destinationlist=c.getpiece().move(boardState, c.x, c.y);
-				if(c.getpiece() instanceof King)
-					destinationlist=filterdestination(destinationlist,c);
-				else
-				{
-					if(boardState[getKing(chance).getx()][getKing(chance).gety()].ischeck())
-						destinationlist = new ArrayList<Cell>(filterdestination(destinationlist,c));
-					else if(destinationlist.isEmpty()==false) // I don't know about this. With Rook this is (x-1, y)
-						for (int i = destinationlist.size() - 1; i >= 0; i--) {
-							if (willkingbeindanger(c,destinationlist.get(i))) {
-								// Remove this possible move.
-								destinationlist.remove(i);
-							}
-						}
-				}
-				highlightdestinations(destinationlist);
+				selectCell(c);
 			}
 		}
 		else
@@ -543,20 +525,7 @@ public class Main extends JFrame implements MouseListener
 			{
 				previous.deselect();
 				cleandestinations(destinationlist);
-				destinationlist.clear();
-				c.select();
-				previous=c;
-				destinationlist=c.getpiece().move(boardState, c.x, c.y);
-				if(c.getpiece() instanceof King)
-					destinationlist=filterdestination(destinationlist,c);
-				else
-				{
-					if(boardState[getKing(chance).getx()][getKing(chance).gety()].ischeck())
-						destinationlist = new ArrayList<Cell>(filterdestination(destinationlist,c));
-					else if(destinationlist.isEmpty()==false && willkingbeindanger(c,destinationlist.get(0)))
-						destinationlist.clear();
-				}
-				highlightdestinations(destinationlist);
+				selectCell(c);
 			}
 		}
 		if(c.getpiece()!=null && c.getpiece() instanceof King)
@@ -564,6 +533,23 @@ public class Main extends JFrame implements MouseListener
 			((King)c.getpiece()).setx(c.x);
 			((King)c.getpiece()).sety(c.y);
 		}
+	}
+	
+	private void selectCell(Cell c) {
+		c.select();
+		previous=c;
+		destinationlist.clear();
+		destinationlist=c.getpiece().move(boardState, c.x, c.y);
+		if(c.getpiece() instanceof King)
+			destinationlist=filterdestination(destinationlist,c);
+		else
+		{
+			if(boardState[getKing(chance).getx()][getKing(chance).gety()].ischeck())
+				destinationlist = new ArrayList<Cell>(filterdestination(destinationlist,c));
+			else if(destinationlist.isEmpty()==false && willkingbeindanger(c,destinationlist.get(0)))
+				destinationlist.clear();
+		}
+		highlightdestinations(destinationlist);
 	}
 
     //Other Irrelevant abstract function. Only the Click Event is captured.
