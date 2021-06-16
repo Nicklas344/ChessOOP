@@ -354,18 +354,19 @@ public class Main extends JFrame implements MouseListener
     	if(newboardstate[tocell.x][tocell.y].getpiece()!=null)
 			newboardstate[tocell.x][tocell.y].removePiece(); 
 		newboardstate[tocell.x][tocell.y].setPiece(newboardstate[fromcell.x][fromcell.y].getpiece());
+		int x = getKing(chance).getx();
+		int y = getKing(chance).gety();
 		if(newboardstate[tocell.x][tocell.y].getpiece() instanceof King)
 		{
 			// more complexity. 
 			((King)(newboardstate[tocell.x][tocell.y].getpiece())).setx(tocell.x);
 			((King)(newboardstate[tocell.x][tocell.y].getpiece())).sety(tocell.y);
+			x = tocell.x;
+			y = tocell.y;
 		}
 		newboardstate[fromcell.x][fromcell.y].removePiece();
 		
-		if (((King)(newboardstate[getKing(chance).getx()][getKing(chance).gety()].getpiece())).isindanger(newboardstate)==true)
-			return true;
-		else
-			return false;
+		return ((King) (newboardstate[x][y].getpiece())).isindanger(newboardstate);
     }
 
     //A function to eliminate the possible moves that will put the King in danger
@@ -377,62 +378,10 @@ public class Main extends JFrame implements MouseListener
     	int x,y;
     	while (it.hasNext())
     	{
-    		// block of code to create a copy and perform this move on newboardstate.
-    		for(int i=0;i<8;i++)
-        		for(int j=0;j<8;j++)
-        		{	try { newboardstate[i][j] = new Cell(boardState[i][j]);} catch (CloneNotSupportedException e){e.printStackTrace();}}
-
     		Cell tempc = it.next();
-    		if(newboardstate[tempc.x][tempc.y].getpiece()!=null)
-    			newboardstate[tempc.x][tempc.y].removePiece();
-    		newboardstate[tempc.x][tempc.y].setPiece(newboardstate[fromcell.x][fromcell.y].getpiece());
-    		x=getKing(chance).getx();
-    		y=getKing(chance).gety();
-    		if(newboardstate[fromcell.x][fromcell.y].getpiece() instanceof King)
-    		{
-    			((King)(newboardstate[tempc.x][tempc.y].getpiece())).setx(tempc.x);
-    			((King)(newboardstate[tempc.x][tempc.y].getpiece())).sety(tempc.y);
-    			x=tempc.x;
-    			y=tempc.y;
-    		}
-    		newboardstate[fromcell.x][fromcell.y].removePiece();
     		
     		// if not in danger, add this move to the list. 
-    		if ((((King)(newboardstate[x][y].getpiece())).isindanger(newboardstate)==false))
-    			newlist.add(tempc);
-    	}
-    	return newlist;
-    }
-
-    //A Function to filter the possible moves when the king of the current player is under Check
-    private ArrayList<Cell> incheckfilter (ArrayList<Cell> destlist, Cell fromcell, int color)
-    {
-    	ArrayList<Cell> newlist = new ArrayList<Cell>();
-    	Cell newboardstate[][] = new Cell[8][8];
-    	ListIterator<Cell> it = destlist.listIterator();
-    	int x,y;
-    	while (it.hasNext())
-    	{
-    		// Again, a block for getting a copy for a board, where a specific move is performed. 
-    		for(int i=0;i<8;i++)
-        		for(int j=0;j<8;j++)
-        		{	try { newboardstate[i][j] = new Cell(boardState[i][j]);} catch (CloneNotSupportedException e){e.printStackTrace();}}
-    		Cell tempc = it.next();
-    		if(newboardstate[tempc.x][tempc.y].getpiece()!=null)
-    			newboardstate[tempc.x][tempc.y].removePiece();
-    		newboardstate[tempc.x][tempc.y].setPiece(newboardstate[fromcell.x][fromcell.y].getpiece());
-    		x=getKing(color).getx();
-    		y=getKing(color).gety();
-    		if(newboardstate[tempc.x][tempc.y].getpiece() instanceof King)
-    		{
-    			((King)(newboardstate[tempc.x][tempc.y].getpiece())).setx(tempc.x);
-    			((King)(newboardstate[tempc.x][tempc.y].getpiece())).sety(tempc.y);
-    			x=tempc.x;
-    			y=tempc.y;
-    		}
-    		newboardstate[fromcell.x][fromcell.y].removePiece();
-    		
-    		if ((((King)(newboardstate[x][y].getpiece())).isindanger(newboardstate)==false))
+    		if (willkingbeindanger(fromcell, tempc) == false)
     			newlist.add(tempc);
     	}
     	return newlist;
@@ -450,7 +399,7 @@ public class Main extends JFrame implements MouseListener
     			{
     				dlist.clear();
     				dlist=boardState[i][j].getpiece().move(boardState, i, j);
-    				dlist=incheckfilter(dlist,boardState[i][j],color);
+    				dlist=filterdestination(dlist,boardState[i][j]);
     				if(dlist.size()!=0)
     					return false;
     			}
