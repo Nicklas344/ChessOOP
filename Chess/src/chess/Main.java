@@ -343,7 +343,7 @@ public class Main extends JFrame implements MouseListener
 
 
   //Function to check if the king will be in danger if the given move is made
-    private boolean willkingbeindanger(Cell fromcell,Cell tocell) // Maybe this method is not always called?
+    private boolean willkingbeindanger(Cell fromcell,Cell tocell, int color) // Maybe this method is not always called?
     {
     	// block to perform move on copy newboardstate. 
     	Cell newboardstate[][] = new Cell[8][8];
@@ -362,7 +362,7 @@ public class Main extends JFrame implements MouseListener
 		}
 		newboardstate[fromcell.x][fromcell.y].removePiece();
 		
-		if (((King)(newboardstate[getKing(chance).getx()][getKing(chance).gety()].getpiece())).isindanger(newboardstate)==true)
+		if (((King)(newboardstate[getKing(color).getx()][getKing(color).gety()].getpiece())).isindanger(newboardstate)==true)
 			return true;
 		else
 			return false;
@@ -521,19 +521,12 @@ public class Main extends JFrame implements MouseListener
 				previous=c;
 				destinationlist.clear();
 				destinationlist=c.getpiece().move(boardState, c.x, c.y);
-				if(c.getpiece() instanceof King)
-					destinationlist=filterdestination(destinationlist,c);
-				else
-				{
-					if(boardState[getKing(chance).getx()][getKing(chance).gety()].ischeck())
-						destinationlist = new ArrayList<Cell>(filterdestination(destinationlist,c));
-					else if(destinationlist.isEmpty()==false) // I don't know about this. With Rook this is (x-1, y)
-						for (int i = destinationlist.size() - 1; i >= 0; i--) {
-							if (willkingbeindanger(c,destinationlist.get(i))) {
-								// Remove this possible move.
-								destinationlist.remove(i);
-							}
-						}
+				
+				for (int i = destinationlist.size() - 1; i >= 0; i--) {
+					if (willkingbeindanger(c,destinationlist.get(i), chance)) {
+						// Remove this possible move.
+						destinationlist.remove(i);
+					}
 				}
 				highlightdestinations(destinationlist);
 			}
@@ -604,7 +597,7 @@ public class Main extends JFrame implements MouseListener
 				{
 					if(boardState[getKing(chance).getx()][getKing(chance).gety()].ischeck())
 						destinationlist = new ArrayList<Cell>(filterdestination(destinationlist,c));
-					else if(destinationlist.isEmpty()==false && willkingbeindanger(c,destinationlist.get(0)))
+					else if(destinationlist.isEmpty()==false && willkingbeindanger(c,destinationlist.get(0), chance))
 						destinationlist.clear();
 				}
 				highlightdestinations(destinationlist);
