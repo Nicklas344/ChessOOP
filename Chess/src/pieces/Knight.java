@@ -22,6 +22,7 @@ public class Knight extends Piece{
 	//Move Function overridden
 	//There are at max 8 possible moves for a knight at any point of time.
 	//Knight moves only 2(1/2) steps
+	@Override
 	public ArrayList<Cell> move(Cell state[][],int x,int y)
 	{
 		possiblemoves.clear();

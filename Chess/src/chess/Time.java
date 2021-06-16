@@ -41,7 +41,8 @@ public class Time
     //A function that is called after every second. It updates the timer and takes other necessary actions
     class CountdownTimerListener implements ActionListener
     {
-        public void actionPerformed(ActionEvent e)
+        @Override
+		public void actionPerformed(ActionEvent e)
         {
        	 int min,sec;
        	 if (Timerem > 0)

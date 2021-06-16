@@ -251,7 +251,7 @@ public class Main extends JFrame implements MouseListener
 		start.addActionListener(new START());
 		start.setPreferredSize(new Dimension(60,40));
 		setTime.setFont(new Font("Arial",Font.BOLD,16));
-		label = new JLabel("Time Starts now", JLabel.CENTER);
+		label = new JLabel("Time Starts now", SwingConstants.CENTER);
 		label.setFont(new Font("SERIF", Font.BOLD, 30));
 	    displayTime=new JPanel(new FlowLayout());
 	    time=new JPanel(new GridLayout(3,3));

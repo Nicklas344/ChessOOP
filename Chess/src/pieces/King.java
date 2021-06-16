@@ -37,6 +37,7 @@ public class King extends Piece{
 		return y;
 	}
 	//Move Function for King Overridden from Pieces
+	@Override
 	public ArrayList<Cell> move(Cell state[][],int x,int y)
 	{
 		//King can move only one step. So all the adjacent 8 cells have been considered.
