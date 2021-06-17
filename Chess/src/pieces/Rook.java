@@ -19,6 +19,7 @@ public class Rook extends Piece{
 	}
 
 	//Move function defined
+	@Override
 	public ArrayList<Cell> move(Cell state[][],int x,int y)
 	{
 		//Rook can move only horizontally or vertically

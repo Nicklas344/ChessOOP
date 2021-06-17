@@ -19,6 +19,7 @@ public class Queen extends Piece{
 	}
 
 	//Move Function Defined
+	@Override
 	public ArrayList<Cell> move(Cell state[][],int x,int y)
 	{
 		//Queen has most number of possible moves
