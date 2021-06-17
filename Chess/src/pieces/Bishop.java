@@ -23,14 +23,14 @@ public class Bishop extends Piece {
 	// a Bishop
 	// The basic principle of Bishop Movement on chess board has been implemented
 	@Override
-	public ArrayList<Cell> move(Cell state[][], int x, int y) {
+	public ArrayList<Cell> getMoves(Cell state[][], int x, int y) {
 		// Bishop can Move diagonally in all 4 direction (NW,NE,SW,SE)
 		// This function defines that logic
-		possiblemoves.clear();
+		possibleMoves.clear();
 		addMovesInLine(state, x, y, 1, 1);
 		addMovesInLine(state, x, y, 1, -1);
 		addMovesInLine(state, x, y, -1, 1);
 		addMovesInLine(state, x, y, -1, -1);
-		return possiblemoves;
+		return possibleMoves;
 	}
 }

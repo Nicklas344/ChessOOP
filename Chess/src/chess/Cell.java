@@ -14,12 +14,12 @@ public class Cell extends JPanel implements Cloneable {
 
 	// Member Variables
 	private static final long serialVersionUID = 1L;
-	private boolean ispossibledestination;
+	private boolean isPossibleDestination;
 	private JLabel content;
 	private Piece piece;
 	int x, y; // is public because this is to be accessed by all the other class
 	private boolean isSelected = false;
-	private boolean ischeck = false;
+	private boolean isCheck = false;
 
 	// Constructors
 	public Cell(int x, int y, Piece p) {
@@ -48,8 +48,8 @@ public class Cell extends JPanel implements Cloneable {
 			setBackground(new Color(113, 198, 113));
 		else
 			setBackground(Color.white);
-		if (cell.getpiece() != null) {
-			setPiece(cell.getpiece().getcopy());
+		if (cell.getPiece() != null) {
+			setPiece(cell.getPiece().getCopy());
 		} else
 			piece = null;
 	}
@@ -73,7 +73,7 @@ public class Cell extends JPanel implements Cloneable {
 		}
 	}
 
-	public Piece getpiece() // Function to access piece of a particular cell
+	public Piece getPiece() // Function to access piece of a particular cell
 	{
 		return this.piece;
 	}
@@ -84,7 +84,7 @@ public class Cell extends JPanel implements Cloneable {
 		this.isSelected = true;
 	}
 
-	public boolean isselected() // Function to return if the cell is under selection
+	public boolean isSelected() // Function to return if the cell is under selection
 	{
 		return this.isSelected;
 	}
@@ -95,41 +95,41 @@ public class Cell extends JPanel implements Cloneable {
 		this.isSelected = false;
 	}
 
-	public void setpossibledestination() // Function to highlight a cell to indicate that it is a possible valid move
+	public void setPossibleDestination() // Function to highlight a cell to indicate that it is a possible valid move
 	{
 		this.setBorder(BorderFactory.createLineBorder(Color.blue, 4));
-		this.ispossibledestination = true;
+		this.isPossibleDestination = true;
 	}
 
-	public void removepossibledestination() // Remove the cell from the list of possible moves
+	public void removePossibleDestination() // Remove the cell from the list of possible moves
 	{
 		this.setBorder(null);
-		this.ispossibledestination = false;
+		this.isPossibleDestination = false;
 	}
 
-	public boolean ispossibledestination() // Function to check if the cell is a possible destination
+	public boolean isPossibleDestination() // Function to check if the cell is a possible destination
 	{
-		return this.ispossibledestination;
+		return this.isPossibleDestination;
 	}
 
-	public void setcheck() // Function to highlight the current cell as checked (For King)
+	public void setCheck() // Function to highlight the current cell as checked (For King)
 	{
 		this.setBackground(Color.RED);
-		this.ischeck = true;
+		this.isCheck = true;
 	}
 
-	public void removecheck() // Function to deselect check
+	public void removeCheck() // Function to deselect check
 	{
 		this.setBorder(null);
 		if ((x + y) % 2 == 0)
 			setBackground(new Color(113, 198, 113));
 		else
 			setBackground(Color.white);
-		this.ischeck = false;
+		this.isCheck = false;
 	}
 
-	public boolean ischeck() // Function to check if the current cell is in check
+	public boolean isCheck() // Function to check if the current cell is in check
 	{
-		return ischeck;
+		return isCheck;
 	}
 }

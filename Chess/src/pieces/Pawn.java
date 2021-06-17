@@ -19,33 +19,33 @@ public class Pawn extends Piece {
 
 	// Move Function Overridden
 	@Override
-	public ArrayList<Cell> move(Cell state[][], int x, int y) {
+	public ArrayList<Cell> getMoves(Cell state[][], int x, int y) {
 		// Pawn can move only one step except the first chance when it may move 2 steps
 		// It can move in a diagonal fashion only for attacking a piece of opposite
 		// color
 		// It cannot move backward or move forward to attact a piece
-		possiblemoves.clear();
+		possibleMoves.clear();
 
-		int dx = (getcolor() == 0) ? -1 : 1;
+		int dx = (getColor() == 0) ? -1 : 1;
 		if (x == (7 + 7 * dx) / 2) {
-			return possiblemoves;
+			return possibleMoves;
 		}
 
-		if (state[x + dx][y].getpiece() == null) {
-			possiblemoves.add(state[x + dx][y]);
+		if (state[x + dx][y].getPiece() == null) {
+			possibleMoves.add(state[x + dx][y]);
 			if (x == (5 - 5 * dx) / 2 + 1) {
-				if (state[(1 - dx) / 2 + 3][y].getpiece() == null)
-					possiblemoves.add(state[(1 - dx) / 2 + 3][y]);
+				if (state[(1 - dx) / 2 + 3][y].getPiece() == null)
+					possibleMoves.add(state[(1 - dx) / 2 + 3][y]);
 			}
 		}
 
-		if ((y > 0) && (state[x + dx][y - 1].getpiece() != null)
-				&& (state[x + dx][y - 1].getpiece().getcolor() != this.getcolor()))
-			possiblemoves.add(state[x + dx][y - 1]);
-		if ((y < 7) && (state[x + dx][y + 1].getpiece() != null)
-				&& (state[x + dx][y + 1].getpiece().getcolor() != this.getcolor()))
-			possiblemoves.add(state[x + dx][y + 1]);
+		if ((y > 0) && (state[x + dx][y - 1].getPiece() != null)
+				&& (state[x + dx][y - 1].getPiece().getColor() != this.getColor()))
+			possibleMoves.add(state[x + dx][y - 1]);
+		if ((y < 7) && (state[x + dx][y + 1].getPiece() != null)
+				&& (state[x + dx][y + 1].getPiece().getColor() != this.getColor()))
+			possibleMoves.add(state[x + dx][y + 1]);
 
-		return possiblemoves;
+		return possibleMoves;
 	}
 }

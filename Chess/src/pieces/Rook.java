@@ -19,13 +19,13 @@ public class Rook extends Piece {
 
 	// Move function defined
 	@Override
-	public ArrayList<Cell> move(Cell state[][], int x, int y) {
+	public ArrayList<Cell> getMoves(Cell state[][], int x, int y) {
 		// Rook can move only horizontally or vertically
-		possiblemoves.clear();
+		possibleMoves.clear();
 		addMovesInLine(state, x, y, 1, 0);
 		addMovesInLine(state, x, y, -1, 0);
 		addMovesInLine(state, x, y, 0, 1);
 		addMovesInLine(state, x, y, 0, -1);
-		return possiblemoves;
+		return possibleMoves;
 	}
 }

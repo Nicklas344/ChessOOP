@@ -23,15 +23,16 @@ public class Player implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private Integer gamesplayed;
-	private Integer gameswon;
+	private Integer gamesPlayed;
+	private Integer gamesWon;
 
 	// Constructor
 	public Player(String name) {
 		this.name = name.trim();
 		// this.lname = lname.trim();
-		gamesplayed = new Integer(0);
-		gameswon = new Integer(0);
+		gamesPlayed = new Integer(0);
+		gamesWon = new Integer(0);
+		System.out.println("Constructor" + gamesPlayed);
 	}
 
 	// Name Getter
@@ -40,31 +41,32 @@ public class Player implements Serializable {
 	}
 
 	// Returns the number of games played
-	public Integer gamesplayed() {
-		return gamesplayed;
+	public Integer gamesPlayed() {
+		return gamesPlayed;
 	}
 
 	// Returns the number of games won
-	public Integer gameswon() {
-		return gameswon;
+	public Integer gamesWon() {
+		return gamesWon;
 	}
 
 	// Calculates the win percentage of the player
 	public Integer winpercent() {
-		return new Integer((gameswon * 100) / gamesplayed);
+		return new Integer((gamesWon * 100) / gamesPlayed);
 	}
 
 	// Increments the number of games played
 	public void updateGamesPlayed() {
-		gamesplayed++;
+		System.out.println(gamesPlayed);
+		gamesPlayed++;
 	}
 
 	// Increments the number of games won
 	public void updateGamesWon() {
-		gameswon++;
+		gamesWon++;
 	}
 
-	public static ArrayList<Player> fetch_players() // Function to fetch the list of the players
+	public static ArrayList<Player> fetchPlayers() // Function to fetch the list of the players
 	{
 		Player tempplayer;
 		ObjectInputStream input = null;
@@ -100,7 +102,7 @@ public class Player implements Serializable {
 		return players;
 	}
 
-	public void Update_Player() // Function to update the statistics of a player
+	public void updatePlayers() // Function to update the statistics of a player
 	{
 		ObjectInputStream input = null;
 		ObjectOutputStream output = null;

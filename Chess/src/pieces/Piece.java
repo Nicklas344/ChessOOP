@@ -17,9 +17,9 @@ public abstract class Piece implements Cloneable {
 	private int color;
 	private String id = null;
 	private String path;
-	protected ArrayList<Cell> possiblemoves = new ArrayList<Cell>(); // Protected (access from child classes)
+	protected ArrayList<Cell> possibleMoves = new ArrayList<Cell>(); // Protected (access from child classes)
 
-	public abstract ArrayList<Cell> move(Cell pos[][], int x, int y); // Abstract Function. Must be overridden
+	public abstract ArrayList<Cell> getMoves(Cell pos[][], int x, int y); // Abstract Function. Must be overridden
 
 	// Id Setter
 	public void setId(String id) {
@@ -47,13 +47,13 @@ public abstract class Piece implements Cloneable {
 	}
 
 	// Color Getter
-	public int getcolor() {
+	public int getColor() {
 		return this.color;
 	}
 
 	// Function to return the a "shallow" copy of the object. The copy has exact
 	// same variable value but different reference
-	public Piece getcopy() throws CloneNotSupportedException {
+	public Piece getCopy() throws CloneNotSupportedException {
 		return (Piece) this.clone();
 	}
 
@@ -61,12 +61,12 @@ public abstract class Piece implements Cloneable {
 		int tmpx = x0 + dx;
 		int tmpy = y0 + dy;
 		while (tmpx <= 7 && tmpx >= 0 && tmpy <= 7 && tmpy >= 0) {
-			if (state[tmpx][tmpy].getpiece() == null) {
-				possiblemoves.add(state[tmpx][tmpy]);
-			} else if (state[tmpx][tmpy].getpiece().getcolor() == this.getcolor()) {
+			if (state[tmpx][tmpy].getPiece() == null) {
+				possibleMoves.add(state[tmpx][tmpy]);
+			} else if (state[tmpx][tmpy].getPiece().getColor() == this.getColor()) {
 				break;
 			} else {
-				possiblemoves.add(state[tmpx][tmpy]);
+				possibleMoves.add(state[tmpx][tmpy]);
 				break;
 			}
 			tmpx += dx;

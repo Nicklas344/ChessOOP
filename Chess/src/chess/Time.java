@@ -15,12 +15,12 @@ import javax.swing.Timer;
 public class Time {
 	private JLabel label;
 	Timer countdownTimer;
-	int Timerem;
+	int timeRem;
 
 	public Time(JLabel passedLabel) {
 		countdownTimer = new Timer(1000, new CountdownTimerListener());
 		this.label = passedLabel;
-		Timerem = Main.timeRemaining;
+		timeRem = Main.timeRemaining;
 	}
 
 	// A function that starts the timer
@@ -30,7 +30,7 @@ public class Time {
 
 	// A function that resets the timer
 	public void reset() {
-		Timerem = Main.timeRemaining;
+		timeRem = Main.timeRemaining;
 	}
 
 	// A function that is called after every second. It updates the timer and takes
@@ -39,12 +39,12 @@ public class Time {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int min, sec;
-			if (Timerem > 0) {
-				min = Timerem / 60;
-				sec = Timerem % 60;
+			if (timeRem > 0) {
+				min = timeRem / 60;
+				sec = timeRem % 60;
 				label.setText(
 						String.valueOf(min) + ":" + (sec >= 10 ? String.valueOf(sec) : "0" + String.valueOf(sec)));
-				Timerem--;
+				timeRem--;
 			} else {
 				label.setText("Time's up!");
 				reset();
