@@ -51,13 +51,14 @@ public class Main extends JFrame implements MouseListener {
 	private static final int HEIGHT = 700;
 	private King wk, bk;
 	private ArrayList<Player> wplayer, bplayer;
-	private String wname = null, bname = null, winner = null;
-	static String move;
 	private Player tempPlayer;
 	private Player white = null, black = null;
+	private String wname = null, bname = null, winner = null;
+	
 	private Time timer;
 	public static Main mainboard;
 	public static int timeRemaining = 60;
+	
 	private boolean selected = false, end = false;
 	private Cell c, previous;
 	private int turn = 0;
@@ -83,7 +84,6 @@ public class Main extends JFrame implements MouseListener {
 	private Main() {
 		timeRemaining = 60;
 		timeSlider = new JSlider();
-		move = "white";
 		wname = null;
 		bname = null;
 		winner = null;
@@ -293,11 +293,7 @@ public class Main extends JFrame implements MouseListener {
 			timer.reset();
 			timer.start();
 			showPlayer.remove(labelCHNC);
-			if (Main.move == "white")
-				Main.move = "black";
-			else
-				Main.move = "white";
-			labelCHNC.setText(Main.move);
+			labelCHNC.setText((turn==0) ? "white" : "black");
 			showPlayer.add(labelCHNC);
 		}
 	}
@@ -570,7 +566,7 @@ public class Main extends JFrame implements MouseListener {
 			mov.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
 			mov.setForeground(Color.red);
 			showPlayer.add(mov);
-			labelCHNC = new JLabel(move);
+			labelCHNC = new JLabel((turn==0) ? "white" : "black");
 			labelCHNC.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
 			labelCHNC.setForeground(Color.blue);
 			showPlayer.add(labelCHNC);
