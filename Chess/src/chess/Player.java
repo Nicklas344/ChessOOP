@@ -26,7 +26,6 @@ public class Player implements Serializable {
 	private Integer gamesPlayed;
 	private Integer gamesWon;
 
-	// Constructor
 	public Player(String name) {
 		this.name = name.trim();
 		// this.lname = lname.trim();
@@ -35,39 +34,32 @@ public class Player implements Serializable {
 		System.out.println("Constructor" + gamesPlayed);
 	}
 
-	// Name Getter
 	public String name() {
 		return name;
 	}
 
-	// Returns the number of games played
 	public Integer gamesPlayed() {
 		return gamesPlayed;
 	}
 
-	// Returns the number of games won
 	public Integer gamesWon() {
 		return gamesWon;
 	}
 
-	// Calculates the win percentage of the player
 	public Integer winpercent() {
 		return new Integer((gamesWon * 100) / gamesPlayed);
 	}
 
-	// Increments the number of games played
 	public void updateGamesPlayed() {
 		System.out.println(gamesPlayed);
 		gamesPlayed++;
 	}
 
-	// Increments the number of games won
 	public void updateGamesWon() {
 		gamesWon++;
 	}
 
-	public static ArrayList<Player> fetchPlayers() // Function to fetch the list of the players
-	{
+	public static ArrayList<Player> fetchPlayers() {
 		Player tempplayer;
 		ObjectInputStream input = null;
 		ArrayList<Player> players = new ArrayList<Player>();
@@ -102,8 +94,7 @@ public class Player implements Serializable {
 		return players;
 	}
 
-	public void updatePlayers() // Function to update the statistics of a player
-	{
+	public void updatePlayers() {
 		ObjectInputStream input = null;
 		ObjectOutputStream output = null;
 		Player temp_player;
@@ -125,17 +116,15 @@ public class Player implements Serializable {
 			{
 				output = new ObjectOutputStream(new java.io.FileOutputStream(outputfile, true));
 				output.writeObject(this);
-			} else // chessgamedata does exist.
-			{
+			} else {
+				// chessgamedata does exist.
 				input = new ObjectInputStream(new FileInputStream(inputfile));
 				output = new ObjectOutputStream(new FileOutputStream(outputfile));
 				playerdonotexist = true;
 				try {
-					// not so happy about this part. Why not update them all at once, that makes
-					// more
-					// sense to me. We are creating input-, output object streams for each player
-					// object.
-					// Onless you are only updating one of them, then I guess it makes enough sense.
+					// Not so happy about this part. Why not update them all at once, that makes
+					// more sense to me. We are creating input-, output object streams for each player
+					// object. Onless you are only updating one of them, then I guess it makes enough sense.
 					while (true) {
 						temp_player = (Player) input.readObject(); // Has multiple objects?
 						if (temp_player.name().equals(name())) {

@@ -9,7 +9,6 @@ public class King extends Piece {
 
 	private int x, y; // Extra variables for King class to keep a track of king's position
 
-	// King Constructor
 	public King(String i, String p, int c, int x, int y) {
 		setx(x);
 		sety(y);
@@ -18,7 +17,6 @@ public class King extends Piece {
 		setColor(c);
 	}
 
-	// general value access functions
 	public void setx(int x) {
 		this.x = x;
 	}
@@ -35,11 +33,9 @@ public class King extends Piece {
 		return y;
 	}
 
-	// Move Function for King Overridden from Pieces
 	@Override
 	public ArrayList<Cell> getMoves(Cell state[][], int x, int y) {
-		// King can move only one step. So all the adjacent 8 cells have been
-		// considered.
+		// King can move only one step. So all the adjacent 8 cells have been considered.
 		possibleMoves.clear();
 		int posx[] = { x, x, x + 1, x + 1, x + 1, x - 1, x - 1, x - 1 };
 		int posy[] = { y - 1, y + 1, y - 1, y, y + 1, y - 1, y, y + 1 };
@@ -50,12 +46,14 @@ public class King extends Piece {
 		return possibleMoves;
 	}
 
-	// Function to check if king is under threat
-	// It checks whether there is any piece of opposite color that can attack king
-	// for a given board state
+	/**
+	 * Checks if there is any piece of opposite color that can attack this king.
+	 * 
+	 * @param state	The given board state, defining where all pieces are.
+	 * @return	True when king is under attack, else false. 
+	 */
 	public boolean isInDanger(Cell state[][]) {
 		// Checking for attack from vertical, horisontal, and diagonal directions.
-
 		int[] dxs = { -1, -1, -1, 0, 0, 1, 1, 1 };
 		int[] dys = { -1, 0, 1, -1, 1, -1, 0, 1 };
 		for (int i = 0; i < dxs.length; i++) {
@@ -63,7 +61,7 @@ public class King extends Piece {
 				return true;
 		}
 
-		// Checking for attack from the Knight of opposite color
+		// Checking for attack from the Knight of opposite color.
 		int posx[] = { x + 1, x + 1, x + 2, x + 2, x - 1, x - 1, x - 2, x - 2 };
 		int posy[] = { y - 2, y + 2, y - 1, y + 1, y - 2, y + 2, y - 1, y + 1 };
 		for (int i = 0; i < 8; i++)
@@ -71,7 +69,7 @@ public class King extends Piece {
 				if (pieceOfColorAt(state[posx[i]][posy[i]], 1 - getColor(), Knight.class))
 					return true;
 
-		// Checking for attack from King of opposite color
+		// Checking for attack from King of opposite color.
 		int pox[] = { x + 1, x + 1, x + 1, x, x, x - 1, x - 1, x - 1 };
 		int poy[] = { y - 1, y + 1, y, y + 1, y - 1, y + 1, y - 1, y };
 		{
@@ -105,8 +103,6 @@ public class King extends Piece {
 		return (cell.getPiece().getClass() == pieceType);
 	}
 
-	// Checks if the is danger from either a rook, bishop, or queen from a specific
-	// direction.
 	private boolean dangerFromLine(Cell state[][], int x0, int y0, int dx, int dy) {
 		if (Math.abs(dx) + Math.abs(dy) != 1 && Math.abs(dx) + Math.abs(dy) != 2) {
 			Exception e = new Exception("Arguments dx and dy have to define a vertical, horisontal, or diagonal line");

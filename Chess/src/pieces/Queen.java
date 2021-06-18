@@ -10,19 +10,15 @@ import chess.Cell;
  */
 public class Queen extends Piece {
 
-	// Constructors
 	public Queen(String i, String p, int c) {
 		setId(i);
 		setPath(p);
 		setColor(c);
 	}
 
-	// Move Function Defined
 	@Override
 	public ArrayList<Cell> getMoves(Cell state[][], int x, int y) {
-		// Queen has most number of possible moves
 		// Queen can move any number of steps in all 8 direction
-		// The possible moves of queen is a combination of Rook and Bishop
 		possibleMoves.clear();
 
 		// Add moves in both vertical, horisontal, and diagonal directions.

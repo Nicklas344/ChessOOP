@@ -10,14 +10,12 @@ import chess.Cell;
  */
 public class Rook extends Piece {
 
-	// Constructor
 	public Rook(String i, String p, int c) {
 		setId(i);
 		setPath(p);
 		setColor(c);
 	}
 
-	// Move function defined
 	@Override
 	public ArrayList<Cell> getMoves(Cell state[][], int x, int y) {
 		// Rook can move only horizontally or vertically

@@ -6,21 +6,15 @@ import chess.Cell;
 
 /**
  * This is the Knight Class inherited from the Piece abstract class
- * 
- *
  */
 public class Knight extends Piece {
 
-	// Constructor
 	public Knight(String i, String p, int c) {
 		setId(i);
 		setPath(p);
 		setColor(c);
 	}
 
-	// Move Function overridden
-	// There are at max 8 possible moves for a knight at any point of time.
-	// Knight moves only 2(1/2) steps
 	@Override
 	public ArrayList<Cell> getMoves(Cell state[][], int x, int y) {
 		possibleMoves.clear();

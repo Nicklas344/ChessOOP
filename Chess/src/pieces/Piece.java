@@ -13,7 +13,6 @@ import chess.Cell;
  */
 public abstract class Piece implements Cloneable {
 
-	// Member Variables
 	private int color;
 	private String id = null;
 	private String path;
@@ -21,39 +20,33 @@ public abstract class Piece implements Cloneable {
 
 	public abstract ArrayList<Cell> getMoves(Cell pos[][], int x, int y); // Abstract Function. Must be overridden
 
-	// Id Setter
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	// Path Setter
 	public void setPath(String path) {
 		this.path = path;
 	}
 
-	// Color Setter
 	public void setColor(int c) {
 		this.color = c;
 	}
 
-	// Path getter
 	public String getPath() {
 		return path;
 	}
 
-	// Id getter
 	public String getId() {
 		return id;
 	}
 
-	// Color Getter
 	public int getColor() {
 		return this.color;
 	}
 
-	// Function to return the a "shallow" copy of the object. The copy has exact
-	// same variable value but different reference
 	public Piece getCopy() throws CloneNotSupportedException {
+		// Return a "shallow" copy of the object. The copy has exact
+		// same variable value but different reference
 		return (Piece) this.clone();
 	}
 
