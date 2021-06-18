@@ -68,17 +68,12 @@ public class Main extends JFrame implements MouseListener {
 	private JPanel board = new JPanel(new GridLayout(8, 8));
 	private JPanel wdetails = new JPanel(new GridLayout(3, 3));
 	private JPanel bdetails = new JPanel(new GridLayout(3, 3));
-	private JPanel wcomboPanel = new JPanel();
-	private JPanel bcomboPanel = new JPanel();
-	private JPanel controlPanel, whitePlayer, blackPlayer, temp, displayTime, showPlayer, time;
+	private JPanel controlPanel, whitePlayer, blackPlayer, temp, displayTime, showPlayer;
 	private JSplitPane split;
 	private JLabel label, mov;
 	private JLabel labelCHNC;
-	private Container content;
 	private JComboBox<String> wcombo, bcombo;
-	private JScrollPane wscroll, bscroll;
 	private JSlider timeSlider;
-	private BufferedImage image;
 	private Button start, wselect, bselect, wnewPlayer, bnewPlayer;
 
 	public static void main(String[] args) {
@@ -120,8 +115,8 @@ public class Main extends JFrame implements MouseListener {
 		board = new JPanel(new GridLayout(8, 8));
 		wdetails = new JPanel(new GridLayout(3, 3));
 		bdetails = new JPanel(new GridLayout(3, 3));
-		bcomboPanel = new JPanel();
-		wcomboPanel = new JPanel();
+		JPanel bcomboPanel = new JPanel();
+		JPanel wcomboPanel = new JPanel();
 		board.setMinimumSize(new Dimension(800, 700));
 		ImageIcon img = new ImageIcon(this.getClass().getResource("icon.png"));
 		this.setIconImage(img.getImage());
@@ -185,7 +180,7 @@ public class Main extends JFrame implements MouseListener {
 		timeSlider.addChangeListener(new TimeChange());
 
 		board.setBorder(BorderFactory.createLoweredBevelBorder());
-		content = getContentPane();
+		Container content = getContentPane();
 		setSize(WIDTH, HEIGHT);
 		setTitle("Chess");
 		content.setBackground(Color.black);
@@ -210,8 +205,8 @@ public class Main extends JFrame implements MouseListener {
 		JPanel blackstats = new JPanel(new GridLayout(3, 3));
 		wcombo = new JComboBox<String>(WNames);
 		bcombo = new JComboBox<String>(BNames);
-		wscroll = new JScrollPane(wcombo);
-		bscroll = new JScrollPane(bcombo);
+		JScrollPane wscroll = new JScrollPane(wcombo);
+		JScrollPane bscroll = new JScrollPane(bcombo);
 		wcomboPanel.setLayout(new FlowLayout());
 		bcomboPanel.setLayout(new FlowLayout());
 		wselect = new Button("Select");
@@ -253,7 +248,7 @@ public class Main extends JFrame implements MouseListener {
 		label = new JLabel("Time Starts now", SwingConstants.CENTER);
 		label.setFont(new Font("SERIF", Font.BOLD, 30));
 		displayTime = new JPanel(new FlowLayout());
-		time = new JPanel(new GridLayout(3, 3));
+		JPanel time = new JPanel(new GridLayout(3, 3));
 		time.add(setTime);
 		time.add(showPlayer);
 		displayTime.add(start);
@@ -267,6 +262,7 @@ public class Main extends JFrame implements MouseListener {
 
 			@Override
 			public void paintComponent(Graphics g) {
+				BufferedImage image = null;
 				try {
 					image = ImageIO.read(this.getClass().getResource("clash.jpg"));
 				} catch (IOException ex) {
