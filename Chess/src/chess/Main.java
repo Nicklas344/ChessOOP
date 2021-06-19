@@ -49,21 +49,22 @@ public class Main extends JFrame implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 1110;
 	private static final int HEIGHT = 700;
+	public static Main mainboard;
+	public static int timeRemaining = 60;
+	private Time timer;
+	
 	private King wk, bk;
+	private Cell boardState[][];
+	private boolean selected = false, end = false;
+	private Cell c, previous;
+	private int turn = 0;
+	private ArrayList<Cell> destinationList = new ArrayList<Cell>();
+	
 	private ArrayList<Player> wplayer, bplayer;
 	private Player tempPlayer;
 	private Player white = null, black = null;
 	private String wname = null, bname = null, winner = null;
 	
-	private Time timer;
-	public static Main mainboard;
-	public static int timeRemaining = 60;
-	
-	private boolean selected = false, end = false;
-	private Cell c, previous;
-	private int turn = 0;
-	private Cell boardState[][];
-	private ArrayList<Cell> destinationList = new ArrayList<Cell>();
 	private JPanel board = new JPanel(new GridLayout(8, 8));
 	private JPanel wdetails = new JPanel(new GridLayout(3, 3));
 	private JPanel bdetails = new JPanel(new GridLayout(3, 3));
@@ -594,16 +595,19 @@ public class Main extends JFrame implements MouseListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			tempPlayer = null;
+			// A lot of if statements. Not good.
 			String n = (color == 0) ? wname : bname;
-			JComboBox<String> jc = (color == 0) ? wcombo : bcombo;
+			JComboBox<String> jc = (color == 0) ? wcombo : bcombo; 
 			JComboBox<String> ojc = (color == 0) ? bcombo : wcombo;
+			// Would be more intuitive to call these bplayers and wplayers I think. 
 			ArrayList<Player> pl = (color == 0) ? wplayer : bplayer;
 			// ArrayList<Player> otherPlayer=(color==0)?bplayer:wplayer;
 			ArrayList<Player> opl = Player.fetchPlayers();
 			if (opl.isEmpty())
 				return;
 			JPanel det = (color == 0) ? wdetails : bdetails;
-			JPanel PL = (color == 0) ? whitePlayer : blackPlayer;
+			// More intuitive to call these something like wplayerPanel and bplayerPanel.
+			JPanel PL = (color == 0) ? whitePlayer : blackPlayer; 
 			if (selected == true)
 				det.removeAll();
 			n = (String) jc.getSelectedItem();
@@ -672,7 +676,7 @@ public class Main extends JFrame implements MouseListener {
 
 				if (n.length() != 0) {
 					Player tem = new Player(n);
-					tem.updatePlayers();
+					tem.updatePlayers(); // updates this player only.
 					if (color == 0)
 						white = tem;
 					else
